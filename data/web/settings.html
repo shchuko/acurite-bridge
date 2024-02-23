@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta http-equiv="refresh" content="10">
+</head>
+<body>
+
+<form action="/" method="POST" id="settingsForm" class="settings-form">
+    <h1><a href="https://github.com/shchuko/esp-weather-bridge" target="_blank">Weather Bridge</a></h1>
+
+    <h2>WiFi Settings</h2>
+    <div class="form-section">
+        <label for="wifi_ssid">SSID:</label>
+        <input type="text" id="wifi_ssid" name="wifi_ssid" value="%WIFI_SSID%">
+        <label for="wifi_password">Password:</label>
+        <div class="input-reveal-container">
+            <input type="password" id="wifi_password" name="wifi_password" value="%WIFI_PASSWORD%">
+            <button type="button" onclick="revealPassword('wifi_password')" class="reveal-button">Reveal</button>
+        </div>
+
+    </div>
+
+    <h2>Weather Station Settings</h2>
+    <div class="form-section">
+        <label for="station">Weather Station:</label>
+        <select name="station" id="station">
+            <option label="foo">Bar</option>
+            <option label="baz">Baz</option>
+        </select>
+    </div>
+
+    <h2>Data export settings</h2>
+    <div class="form-section">
+
+        <h3>PWSWeather</h3>
+        <label for="pwsweather_station_id">Station ID:</label>
+        <input type="text" id="pwsweather_station_id" name="pwsweather_station_id" value="%PWSWEATHER_STATION_ID%">
+
+        <label for="pwsweather_api_key">API KEY:</label>
+        <div class="input-reveal-container">
+            <input type="password" id="pwsweather_api_key" name="pwsweather_api_key" value="%PWSWEATHER_API_KEY%">
+            <button type="button" onclick="revealPassword('pwsweather_api_key')" class="reveal-button">Reveal
+            </button>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h3>WindGuru</h3>
+
+        <label for="windguru_station_uid">Station UID:</label>
+        <input type="text" id="windguru_station_uid" name="windguru_station_uid" value="%WINDGURU_STATION_UID%">
+
+        <label for="windguru_station_password">Station Password:</label>
+        <div class="input-reveal-container">
+            <input type="password" id="windguru_station_password" name="windguru_station_password"
+                   value="%WINDGURU_STATION_PASSWORD%">
+            <button type="button" onclick="revealPassword('windguru_station_password')" class="reveal-button">Reveal
+            </button>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h3>Windy</h3>
+        <label for="windy_api_key">API KEY:</label>
+        <div class="input-reveal-container">
+            <input type="password" id="windy_api_key" name="windy_api_key" value="%WINDY_API_KEY%">
+            <button type="button" onclick="revealPassword('windy_api_key')" class="reveal-button">Reveal</button>
+        </div>
+        <label for="windy_station_id">Station ID:</label>
+        <input type="text" id="windy_station_id" name="windy_station_id" value="%WINDY_STATION_ID%">
+    </div>
+
+    <div class="form-section">
+        <h3>Weather Underground</h3>
+        <label for="wu_api_key">API KEY:</label>
+        <div class="input-reveal-container">
+            <input type="password" id="wu_api_key" name="wu_api_key" value="%WU_API_KEY%">
+            <button type="button" onclick="revealPassword('wu_api_key')" class="reveal-button">Reveal</button>
+        </div>
+        <label for="wu_station_id">Station ID:</label>
+        <input type="text" id="wu_station_id" name="wu_station_id" value="%WU_STATION_ID%">
+    </div>
+
+
+
+    <input type="submit" value="Save Settings" class="submit-button">
+</form>
+
+<script>
+    function revealPassword(id) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+</script>
+</body>
+
+</html>

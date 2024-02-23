@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.settings-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.settings-form h2, .settings-form h3 {
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-section label {
+    font-weight: bold;
+    color: #555;
+}
+
+.form-section input[type="text"],
+.form-section input[type="password"],
+.form-section select {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+select {
+    width: 100%;
+    font-size: 1em;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    -webkit-appearance: none; /* Removes default dropdown arrow in Chrome and Safari*/
+    -moz-appearance: none; /* Removes default dropdown arrow in Firefox */
+    appearance: none; /* Removes default dropdown arrow in other browsers*/
+}
+
+.input-reveal-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reveal-button {
+    border: none;
+    background-color: #007BFF;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: .8em;
+    margin-left: 10px;
+}
+
+.reveal-button:hover {
+    background-color: #0056b3;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+form input {
+    margin: 10px 0;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
