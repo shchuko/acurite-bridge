@@ -16,7 +16,7 @@ protected:
 
     explicit DisplayPage(Adafruit_GFX &display) : delegate(display) {};
 public:
-    virtual void paint() {}
+    virtual void paint();
 };
 
 class ConnectionStatusPage : public DisplayPage {

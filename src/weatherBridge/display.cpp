@@ -57,38 +57,81 @@ static const unsigned char PROGMEM image_earth_bits[] = {0x07, 0xc0, 0x1e, 0x70,
                                                          0xc0,
                                                          0x00, 0x00};
 
+static const unsigned char PROGMEM image_menu_tools_bits[] = {0x80, 0xe0, 0xc1, 0x60, 0x42, 0x80, 0x22, 0x8c, 0x13,
+                                                              0x0c, 0x0a, 0xb4, 0x06, 0x48, 0x05, 0xf0, 0x0b, 0x00,
+                                                              0x14, 0xe0, 0x29, 0xb0, 0x50, 0xd8, 0xa0, 0x6c, 0xc0,
+                                                              0x34, 0x00, 0x1c, 0x00, 0x00};
+
 
 static const unsigned char PROGMEM image_list_element_tick[] = {0x80, 0xc0, 0xe0};
+
+void DisplayPage::paint() {}
 
 ConnectionStatusPage::ConnectionStatusPage(Adafruit_GFX &display) : DisplayPage(display) {}
 
 void ConnectionStatusPage::paint() {
+    WifiAPContext *wifiApContext = weatherBridgeContext.wifiApContext;
+    String apInitError = "AP_INIT_ERROR";
     // Wi-Fi details
-    delegate.drawBitmap(3, 7, image_network_bits, 15, 16, 1);
+    if (weatherBridgeContext.isInConfigurationMode) {
+        delegate.drawBitmap(3, 7, image_menu_tools_bits, 15, 16, 1);
 
-    delegate.setTextColor(1);
-    delegate.setTextSize(1);
-    delegate.setCursor(22, 3);
-    delegate.setTextWrap(false);
-    delegate.print("TEST_WIFI_NETWORK");
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(22, 3);
+        delegate.setTextWrap(false);
+        if (wifiApContext != nullptr) {
+            delegate.print("SSID: " + wifiApContext->ssid);
+        } else {
+            delegate.print(apInitError);
+        }
 
-    delegate.setTextColor(1);
-    delegate.setTextSize(1);
-    delegate.setCursor(22, 12);
-    delegate.setTextWrap(false);
-    delegate.print("Signal:");
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(22, 12);
+        delegate.setTextWrap(false);
+        if (wifiApContext != nullptr) {
+            delegate.print("PWD: " + wifiApContext->password);
+        } else {
+            delegate.print(apInitError);
+        }
 
-    delegate.setTextColor(1);
-    delegate.setTextSize(1);
-    delegate.setCursor(67, 12);
-    delegate.setTextWrap(false);
-    delegate.print(getWifiSignalName(WifiSignal::NO_SIGNAL));
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(22, 21);
+        delegate.setTextWrap(false);
+        if (wifiApContext != nullptr) {
+            delegate.print(wifiApContext->ip);
+        } else {
+            delegate.print(apInitError);
+        }
+    } else {
+        delegate.drawBitmap(3, 7, image_network_bits, 14, 16, 1);
 
-    delegate.setTextColor(1);
-    delegate.setTextSize(1);
-    delegate.setCursor(22, 21);
-    delegate.setTextWrap(false);
-    delegate.print(F("255.255.255.255"));
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(22, 3);
+        delegate.setTextWrap(false);
+        delegate.print("TEST_WIFI_NETWORK");
+
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(22, 12);
+        delegate.setTextWrap(false);
+        delegate.print("Signal:  ");
+
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(67, 12);
+        delegate.setTextWrap(false);
+        delegate.print(getWifiSignalName(WifiSignal::NO_SIGNAL));
+
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(22, 21);
+        delegate.setTextWrap(false);
+        delegate.print(F("255.255.255.255"));
+    }
 
     // Station details
     delegate.drawBitmap(2, 42, image_cloud_bits, 17, 16, 1);
@@ -153,12 +196,18 @@ String ConnectionStatusPage::getStationSignalName(StationSignal signal) {
 DateTimePage::DateTimePage(Adafruit_GFX &display) : DisplayPage(display) {}
 
 void DateTimePage::paint() {
-    TimeContext &timeContext = weatherBridgeContext.time;
-
-    uint8_t timezoneShift = timeContext.getTimezoneShift();
-    time_t time = timeContext.getCurrentTime();
-    timeStatus_t status = timeContext.getCurrentTimeStatus();
+    TimeContext *timeContext;
+    uint8_t timezoneShift = 0;
+    time_t time = 0;
+    timeStatus_t status = timeNeedsSync;
     char charBuf[20];
+
+    timeContext = weatherBridgeContext.time;
+    if (timeContext != nullptr) {
+        timezoneShift = timeContext->getTimezoneShift();
+        time = timeContext->getCurrentTime();
+        status = timeContext->getCurrentTimeStatus();
+    }
 
     delegate.setTextColor(1);
     delegate.setTextSize(2);
@@ -364,7 +413,7 @@ WeatherBridgeDisplay::~WeatherBridgeDisplay() {
 }
 
 void WeatherBridgeDisplay::begin() {
-    Log.infoln("Initializing WeatherBridgeDisplay");
+    Log.noticeln("Initializing WeatherBridgeDisplay");
     if (delegate.begin(SSD1306_SWITCHCAPVCC, WEATHER_EXPORTER_DISPLAY_I2C_ADDR)) {
         delegate.clearDisplay();
         paintSplash();
@@ -385,7 +434,7 @@ void WeatherBridgeDisplay::begin() {
 void WeatherBridgeDisplay::refresh() {
     unsigned long currentMillis = millis();
     if (currentMillis - lastPageSwitchMillis >= WEATHER_EXPORTER_DISPLAY_PAGE_UPDATE_INTERVAL_MILLIS) {
-        Log.infoln(F("WeatherBridgeDisplay: Performing refresh"));
+        Log.traceln(F("WeatherBridgeDisplay: Performing refresh"));
         lastPageSwitchMillis = currentMillis;
         nextPage();
     }
@@ -393,13 +442,13 @@ void WeatherBridgeDisplay::refresh() {
 
 void WeatherBridgeDisplay::nextPage() {
     size_t totalPages = ArraySize(pages);
-    Log.infoln(F("WeatherBridgeDisplay: Painting page %d of %d"), nextPageIndex + 1, totalPages);
+    Log.traceln(F("WeatherBridgeDisplay: Painting page %d of %d"), nextPageIndex + 1, totalPages);
 
     delegate.clearDisplay();
     pages[nextPageIndex]->paint();
     delegate.display();
     nextPageIndex = (nextPageIndex + 1) % totalPages;
-    Log.infoln(F("WeatherBridgeDisplay: Painting complete"));
+    Log.traceln(F("WeatherBridgeDisplay: Painting complete"));
 }
 
 void WeatherBridgeDisplay::paintSplash() {
