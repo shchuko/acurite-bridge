@@ -1,36 +1,29 @@
 #include <HardwareSerial.h>
 #include <ArduinoLog.h>
-#include "weatherBridge/display.hpp"
-#include "weatherBridge/InputPullUpButton.hpp"
-#include "weatherBridge/ConfigurationModeWiFi.hpp"
+
+#include "weatherBridge/WeatherBridge.hpp"
 
 #define SERIAL_BAUD 9600
 #define CONFIG_MODE_BUTTON_PIN 21
 
-WeatherBridgeContext weatherBridgeContext = WeatherBridgeContext();
-WeatherBridgeDisplay display = WeatherBridgeDisplay();
-InputPullUpButton configModeButton = InputPullUpButton(CONFIG_MODE_BUTTON_PIN);
-ConfigurationModeWiFi configurationModeWiFi = ConfigurationModeWiFi();
-
+WeatherBridge weatherBridge = WeatherBridge(SPIFFS, CONFIG_MODE_BUTTON_PIN); // NOLINT(*-interfaces-global-init)
 
 void setup() {
     Serial.begin(SERIAL_BAUD);
-    Log.begin(LOG_LEVEL_INFO, &Serial);
-    display.begin();
-    configModeButton.begin();
+    Log.begin(LOG_LEVEL_TRACE, &Serial);
 
-    // TODO use timeProvider.begin()
-    weatherBridgeContext.updateTimeContext(new TimeContext(0));
-
-    if (configModeButton.isPressed()) {
-        Log.noticeln("Starting in configuration mode");
-        weatherBridgeContext.isInConfigurationMode = true;
-        configurationModeWiFi.begin();
-    } else {
-        Log.noticeln("Starting in regular mode");
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EndlessLoop"
+    if (!SPIFFS.begin(false)) {
+        for (;;) {
+            Log.errorln("An error has occurred while mounting SPIFFS");
+        }
+#pragma clang diagnostic pop
     }
+
+    weatherBridge.begin();
 }
 
 void loop() {
-    display.refresh();
+    weatherBridge.loop();
 }

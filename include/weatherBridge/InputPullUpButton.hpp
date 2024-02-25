@@ -4,12 +4,12 @@
 
 class InputPullUpButton {
 private:
-    uint8_t pin;
+    const uint8_t pin;
 
 public:
-    explicit InputPullUpButton(uint8_t pin);
+    explicit InputPullUpButton(uint8_t pin) noexcept;
 
-    void begin() const;
+    void begin() const noexcept;
 
-    boolean isPressed() const;
+    bool isPressed() const noexcept;
 };

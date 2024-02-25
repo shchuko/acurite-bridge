@@ -1,8 +1,7 @@
-#include "weatherBridge/ConfigurationModeWiFi.hpp"
+#include "weatherBridge/wifi/ap/WiFiAP.hpp"
 
 
-void ConfigurationModeWiFi::begin() {
-#pragma clang diagnostic pop
+WiFiAPStatus WiFiAP::begin() {
     char ssid[25]{};
     char password[10]{};
     String ip;
@@ -16,11 +15,10 @@ void ConfigurationModeWiFi::begin() {
     ip = WiFi.softAPIP().toString();
     Log.noticeln("Initialized WiFi in AP mode, ip=%s", ip.c_str());
 
-    auto *wifiApContext = new WifiAPContext(ssid, password, std::move(ip));
-    weatherBridgeContext.updateWiFiAPContext(wifiApContext);
+    return { ssid, password, std::move(ip) };
 }
 
-void ConfigurationModeWiFi::generateAndFillSettings(char *ssid, char *password) {
+void WiFiAP::generateAndFillSettings(char *ssid, char *password) {
     snprintf(ssid, 25, "ESP-%ld", random(1000, 9999));
     itoa(random(100000000, 999999999), password, 10);
 }

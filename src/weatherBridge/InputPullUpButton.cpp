@@ -2,14 +2,14 @@
 
 #include <ArduinoLog.h>
 
-InputPullUpButton::InputPullUpButton(uint8_t pin) : pin(pin) {}
+InputPullUpButton::InputPullUpButton(uint8_t pin) noexcept: pin(pin) {}
 
-void InputPullUpButton::begin() const {
+void InputPullUpButton::begin() const noexcept {
     Log.infoln("Creating InputPullUpButton on pin %d", pin);
     pinMode(pin, INPUT_PULLUP);
     delay(100);
 }
 
-boolean InputPullUpButton::isPressed() const {
+bool InputPullUpButton::isPressed() const noexcept {
     return digitalRead(pin) == 0;
 }
