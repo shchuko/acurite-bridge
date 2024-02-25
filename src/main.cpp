@@ -4,7 +4,7 @@
 #include "weatherBridge/WeatherBridge.hpp"
 
 #define SERIAL_BAUD 9600
-#define CONFIG_MODE_BUTTON_PIN 21
+#define CONFIG_MODE_BUTTON_PIN 4
 
 WeatherBridge weatherBridge = WeatherBridge(SPIFFS, CONFIG_MODE_BUTTON_PIN); // NOLINT(*-interfaces-global-init)
 
