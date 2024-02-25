@@ -4,7 +4,9 @@
 #define FS_SETTING_STORE_KEY(s) FS_SETTING_STORE_DIR s
 
 static const String WLAN_SSID = FS_SETTING_STORE_KEY("wlan_ssid");
-static const String WLAN_PASSWORD = FS_SETTING_STORE_KEY("wlan_pws");
+static const String WLAN_PASSWORD = FS_SETTING_STORE_KEY("wlan_pwd");
+static const String AP_SSID = FS_SETTING_STORE_KEY("ap_ssid");
+static const String AP_PASSWORD = FS_SETTING_STORE_KEY("ap_pwd");
 static const String POSIX_TZ_STRING = FS_SETTING_STORE_KEY("posix_tz_str");
 static const String PWS_WEATHER_STATION_ID = FS_SETTING_STORE_KEY("pww_station_id");
 static const String PWS_WEATHER_API_KEY = FS_SETTING_STORE_KEY("pww_api_key");
@@ -15,13 +17,14 @@ static const String WINDY_STATION_ID = FS_SETTING_STORE_KEY("windy_id");
 static const String WU_API_KEY = FS_SETTING_STORE_KEY("wu_key");
 static const String WU_STATION_ID = FS_SETTING_STORE_KEY("wu_id");
 
-
 FSSettingStore::FSSettingStore(FS &fs) noexcept: fs(fs) {}
 
 WeatherBridgeSettings FSSettingStore::loadSettings() {
     return {
             readFile(WLAN_SSID),
             readFile(WLAN_PASSWORD),
+            readFile(AP_SSID),
+            readFile(AP_PASSWORD),
             readFile(POSIX_TZ_STRING),
             readFile(PWS_WEATHER_STATION_ID),
             readFile(PWS_WEATHER_API_KEY),
@@ -37,6 +40,8 @@ WeatherBridgeSettings FSSettingStore::loadSettings() {
 bool FSSettingStore::writeSettings(WeatherBridgeSettings &settings) {
     bool wlanSsidWriteRes = writeFile(WLAN_SSID, settings.getWlanSsid());
     bool wlanPasswordWriteRes = writeFile(WLAN_PASSWORD, settings.getWlanPassword());
+    bool apSsidWriteRes = writeFile(AP_SSID, settings.getApSsid());
+    bool apPasswordWriteRes = writeFile(AP_PASSWORD, settings.getApPassword());
     bool posixTzStringWriteRes = writeFile(POSIX_TZ_STRING, settings.getPosixTzString());
     bool pwsWeatherStationIdWriteRes = writeFile(PWS_WEATHER_STATION_ID, settings.getPwsWeatherStationId());
     bool pwsWeatherApiKeyWriteRes = writeFile(PWS_WEATHER_API_KEY, settings.getPwsWeatherApiKey());
@@ -50,6 +55,8 @@ bool FSSettingStore::writeSettings(WeatherBridgeSettings &settings) {
 
     return wlanSsidWriteRes
            && wlanPasswordWriteRes
+           && apSsidWriteRes
+           && apPasswordWriteRes
            && posixTzStringWriteRes
            && pwsWeatherStationIdWriteRes
            && pwsWeatherApiKeyWriteRes

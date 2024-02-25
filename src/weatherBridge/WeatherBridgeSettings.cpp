@@ -3,6 +3,8 @@
 WeatherBridgeSettings::WeatherBridgeSettings(
         const String &&wlanSsid,
         const String &&wlanPassword,
+        const String &&apSsid,
+        const String &&apPassword,
         const String &&posixTzString,
         const String &&pwsWeatherStationId,
         const String &&pwsWeatherApiKey,
@@ -14,6 +16,8 @@ WeatherBridgeSettings::WeatherBridgeSettings(
         const String &&wuStationId
 ) : wlanSsid(wlanSsid),
     wlanPassword(wlanPassword),
+    apSsid(apSsid.isEmpty() ? String(DEFAULT_AP_NAME) : apSsid),
+    apPassword(apPassword),
     posixTzString(posixTzString),
     pwsWeatherStationId(pwsWeatherStationId),
     pwsWeatherApiKey(pwsWeatherApiKey),
@@ -28,6 +32,8 @@ WeatherBridgeSettings::WeatherBridgeSettings(
 WeatherBridgeSettings::WeatherBridgeSettings(WeatherBridgeSettings &&other) noexcept:
         wlanSsid(std::move(other.wlanSsid)),
         wlanPassword(std::move(other.wlanPassword)),
+        apSsid(std::move(other.apSsid)),
+        apPassword(std::move(other.apPassword)),
         posixTzString(std::move(other.posixTzString)),
         pwsWeatherStationId(std::move(other.pwsWeatherStationId)),
         pwsWeatherApiKey(std::move(other.pwsWeatherApiKey)),
@@ -42,6 +48,8 @@ WeatherBridgeSettings &WeatherBridgeSettings::operator=(WeatherBridgeSettings &&
     if (this != &other) {
         wlanSsid = std::move(other.wlanSsid);
         wlanPassword = std::move(other.wlanPassword);
+        apSsid = std::move(other.apSsid);
+        apPassword = std::move(other.apPassword);
         posixTzString = std::move(other.posixTzString);
         pwsWeatherStationId = std::move(other.pwsWeatherStationId);
         pwsWeatherApiKey = std::move(other.pwsWeatherApiKey);
@@ -62,6 +70,14 @@ const String &WeatherBridgeSettings::getWlanSsid() const {
 
 const String &WeatherBridgeSettings::getWlanPassword() const {
     return wlanPassword;
+}
+
+const String &WeatherBridgeSettings::getApSsid() const {
+    return apSsid;
+}
+
+const String &WeatherBridgeSettings::getApPassword() const {
+    return apPassword;
 }
 
 const String &WeatherBridgeSettings::getPwsWeatherStationId() const {

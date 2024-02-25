@@ -1,24 +1,24 @@
 #include "weatherBridge/wifi/ap/WiFiAP.hpp"
 
 
-WiFiAPStatus WiFiAP::begin() {
-    char ssid[25]{};
-    char password[10]{};
+WiFiAPStatus WiFiAP::begin(WeatherBridgeSettings &settings) {
+    String ssid = settings.getApSsid();
+    String password = settings.getApPassword();
     String ip;
 
-    Log.noticeln("Initializing WiFi in AP mode");
-    generateAndFillSettings(ssid, password);
+    if (ssid.isEmpty()) {
+        ssid = "ESP-AP";
+        Log.errorln("Empty AP SSID specified, fallback to default=%s", ssid.c_str());
+    }
 
-    Log.noticeln("Initializing WiFi in AP mode, configuration ssid=%s,password=%s", ssid, password);
-
-    WiFi.softAP(ssid, password);
+    Log.noticeln("Initializing WiFi in AP mode, configuration ssid=%s,password=%s", ssid.c_str(), password.c_str());
+    if (password.isEmpty()) {
+        WiFi.softAP(ssid);
+    } else {
+        WiFi.softAP(ssid, password);
+    }
     ip = WiFi.softAPIP().toString();
     Log.noticeln("Initialized WiFi in AP mode, ip=%s", ip.c_str());
 
-    return { ssid, password, std::move(ip) };
-}
-
-void WiFiAP::generateAndFillSettings(char *ssid, char *password) {
-    snprintf(ssid, 25, "ESP-%ld", random(1000, 9999));
-    itoa(random(100000000, 999999999), password, 10);
+    return {std::move(ssid), std::move(password), std::move(ip)};
 }

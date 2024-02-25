@@ -4,8 +4,12 @@
 
 class WeatherBridgeSettings {
 private:
+    static constexpr auto DEFAULT_AP_NAME = "WBridge-AP";
+
     String wlanSsid = "";
     String wlanPassword = "";
+    String apSsid = DEFAULT_AP_NAME;
+    String apPassword = "";
     String pwsWeatherStationId = "";
     String pwsWeatherApiKey = "";
     String windGuruStationUid = "";
@@ -21,6 +25,8 @@ public:
 
     WeatherBridgeSettings(const String &&wlanSsid,
                           const String &&wlanPassword,
+                          const String &&apSsid,
+                          const String &&apPassword,
                           const String &&posixTzString,
                           const String &&pwsWeatherStationId,
                           const String &&pwsWeatherApiKey,
@@ -58,4 +64,7 @@ public:
 
     const String &getPosixTzString() const;
 
+    const String &getApSsid() const;
+
+    const String &getApPassword() const;
 };

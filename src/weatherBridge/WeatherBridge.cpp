@@ -10,7 +10,7 @@ void WeatherBridge::begin() {
 
     if (configModeButton.isPressed()) {
         isConfigurationMode = true;
-        wifiApStatus = WiFiAP::begin();
+        wifiApStatus = WiFiAP::begin(settings);
     } else {
         wifiClientConnector.begin(settings.getWlanSsid(), settings.getWlanPassword());
     }

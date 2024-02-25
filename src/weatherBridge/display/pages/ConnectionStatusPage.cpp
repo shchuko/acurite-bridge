@@ -42,7 +42,11 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
         delegate.setCursor(22, 12);
         delegate.setTextWrap(false);
         if (context.wifiApContext.isActive()) {
-            delegate.print("PWD: " + context.wifiApContext.getPassword());
+            if (context.wifiApContext.getPassword().isEmpty()) {
+                delegate.print("(No password)");
+            } else {
+                delegate.print("PWD: " + context.wifiApContext.getPassword());
+            }
         } else {
             delegate.print("");
         }
