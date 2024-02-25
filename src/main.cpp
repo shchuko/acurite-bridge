@@ -17,6 +17,7 @@ void setup() {
     if (!SPIFFS.begin(false)) {
         for (;;) {
             Log.errorln("An error has occurred while mounting SPIFFS");
+            delay(1000);
         }
 #pragma clang diagnostic pop
     }
