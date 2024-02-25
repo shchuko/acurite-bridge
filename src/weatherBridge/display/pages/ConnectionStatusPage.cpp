@@ -23,7 +23,6 @@ ConnectionStatusPage::ConnectionStatusPage(Adafruit_GFX &display) : DisplayPage(
 
 
 void ConnectionStatusPage::paint(WeatherBridgeContext context) {
-    String apInitError = "AP_INIT_ERROR";
     // Wi-Fi details
     if (context.isConfigurationMode) {
         delegate.drawBitmap(3, 7, image_menu_tools_bits, 15, 16, 1);
@@ -32,30 +31,30 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
         delegate.setTextSize(1);
         delegate.setCursor(22, 3);
         delegate.setTextWrap(false);
-        if (!context.wifiApContext.isActive()) {
+        if (context.wifiApContext.isActive()) {
             delegate.print("SSID: " + context.wifiApContext.getSsid());
         } else {
-            delegate.print(apInitError);
+            delegate.print("AP_INIT_ERROR");
         }
 
         delegate.setTextColor(1);
         delegate.setTextSize(1);
         delegate.setCursor(22, 12);
         delegate.setTextWrap(false);
-        if (!context.wifiApContext.isActive()) {
+        if (context.wifiApContext.isActive()) {
             delegate.print("PWD: " + context.wifiApContext.getPassword());
         } else {
-            delegate.print(apInitError);
+            delegate.print("");
         }
 
         delegate.setTextColor(1);
         delegate.setTextSize(1);
         delegate.setCursor(22, 21);
         delegate.setTextWrap(false);
-        if (!context.wifiApContext.isActive()) {
+        if (context.wifiApContext.isActive()) {
             delegate.print(context.wifiApContext.getIp());
         } else {
-            delegate.print(apInitError);
+            delegate.print("");
         }
     } else {
         delegate.drawBitmap(3, 7, image_network_bits, 14, 16, 1);
@@ -79,7 +78,11 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
         delegate.setTextSize(1);
         delegate.setCursor(22, 12);
         delegate.setTextWrap(false);
-        delegate.print(getWifiSignalName(context.wifiConnectionStatus.getSignalLevel()));
+        if (!activeSsid.isEmpty() || !settingsSsid.isEmpty()) {
+            delegate.print(getWifiSignalName(context.wifiConnectionStatus.getSignalLevel()));
+        } else {
+            delegate.print("");
+        }
     }
 
     // Station details
