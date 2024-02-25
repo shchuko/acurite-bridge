@@ -1,28 +1,24 @@
 #include "weatherBridge/FSSettingStore.hpp"
 
-#define FS_SETTING_STORE_DIR "/kv-setting-store"
-#define FS_SETTING_STORE_KEY(s) FS_SETTING_STORE_DIR "/" s ".txt"
+#define FS_SETTING_STORE_DIR "/_kv_"
+#define FS_SETTING_STORE_KEY(s) FS_SETTING_STORE_DIR s
 
 static const String WLAN_SSID = FS_SETTING_STORE_KEY("wlan_ssid");
-static const String WLAN_PASSWORD = FS_SETTING_STORE_KEY("wlan_password");
-static const String POSIX_TZ_STRING = FS_SETTING_STORE_KEY("posix_tz_string");
-static const String PWS_WEATHER_STATION_ID = FS_SETTING_STORE_KEY("pws_weather_station_id");
-static const String PWS_WEATHER_API_KEY = FS_SETTING_STORE_KEY("pws_weather_api_key");
-static const String WIND_GURU_STATION_UID = FS_SETTING_STORE_KEY("wind_guru_station_uid");
-static const String WIND_GURU_STATION_PASSWORD = FS_SETTING_STORE_KEY("wind_guru_station_password");
-static const String WINDY_API_KEY = FS_SETTING_STORE_KEY("windy_api_key");
-static const String WINDY_STATION_ID = FS_SETTING_STORE_KEY("windy_station_id");
-static const String WU_API_KEY = FS_SETTING_STORE_KEY("wu_api_key");
-static const String WU_STATION_ID = FS_SETTING_STORE_KEY("wu_station_id");
+static const String WLAN_PASSWORD = FS_SETTING_STORE_KEY("wlan_pws");
+static const String POSIX_TZ_STRING = FS_SETTING_STORE_KEY("posix_tz_str");
+static const String PWS_WEATHER_STATION_ID = FS_SETTING_STORE_KEY("pww_station_id");
+static const String PWS_WEATHER_API_KEY = FS_SETTING_STORE_KEY("pww_api_key");
+static const String WIND_GURU_STATION_UID = FS_SETTING_STORE_KEY("windguru_uid");
+static const String WIND_GURU_STATION_PASSWORD = FS_SETTING_STORE_KEY("windguru_pwd");
+static const String WINDY_API_KEY = FS_SETTING_STORE_KEY("windy_key");
+static const String WINDY_STATION_ID = FS_SETTING_STORE_KEY("windy_id");
+static const String WU_API_KEY = FS_SETTING_STORE_KEY("wu_key");
+static const String WU_STATION_ID = FS_SETTING_STORE_KEY("wu_id");
 
 
 FSSettingStore::FSSettingStore(FS &fs) noexcept: fs(fs) {}
 
 WeatherBridgeSettings FSSettingStore::loadSettings() {
-    if (!fs.exists(FS_SETTING_STORE_DIR)) {
-        fs.mkdir(FS_SETTING_STORE_DIR);
-    }
-
     return {
             readFile(WLAN_SSID),
             readFile(WLAN_PASSWORD),
@@ -75,13 +71,6 @@ String FSSettingStore::readFile(const String &path) {
         return output;
     }
 
-    if (file.isDirectory()) {
-        Log.traceln("Found directory instead of file %s", path.c_str());
-        file.close();
-        return output;
-    }
-
-
     while (file.available()) {
         output = output + file.readString();
         break;
@@ -92,6 +81,11 @@ String FSSettingStore::readFile(const String &path) {
 }
 
 bool FSSettingStore::writeFile(const String &path, const String &message) {
+    if (message.isEmpty()) {
+        Log.traceln("Removing file %s", path.c_str());
+        return fs.remove(path);
+    }
+
     Log.traceln("Writing file %s", path.c_str());
     File file = fs.open(path, FILE_WRITE);
     if (!file) {
