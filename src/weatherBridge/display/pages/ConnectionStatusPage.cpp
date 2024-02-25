@@ -98,12 +98,6 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
     delegate.setTextSize(1);
     delegate.setCursor(21, 44);
     delegate.setTextWrap(false);
-    delegate.print("Signal:");
-
-    delegate.setTextColor(1);
-    delegate.setTextSize(1);
-    delegate.setCursor(66, 44);
-    delegate.setTextWrap(false);
     delegate.print(getStationSignalName(StationSignal::NO_CONNECTION));
 
     delegate.setTextColor(1);
@@ -135,12 +129,12 @@ String ConnectionStatusPage::getWifiSignalName(WifiSignal signal) {
 String ConnectionStatusPage::getStationSignalName(StationSignal signal) {
     switch (signal) {
         case StationSignal::BAD:
-            return F("BAD");
+            return F("Signal: BAD");
         case StationSignal::NORMAL:
-            return F("NORMAL");
+            return F("Signal: NORMAL");
         case StationSignal::GOOD:
-            return F("GOOD");
+            return F("Signal: GOOD");
         case StationSignal::NO_CONNECTION:
-            return F("NO CONNECTION");
+            return F("NOT CONNECTED");
     }
 }
