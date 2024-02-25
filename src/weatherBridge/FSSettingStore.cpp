@@ -81,7 +81,7 @@ String FSSettingStore::readFile(const String &path) {
 }
 
 bool FSSettingStore::writeFile(const String &path, const String &message) {
-    if (message.isEmpty()) {
+    if (message.isEmpty() && fs.exists(path)) {
         Log.traceln("Removing file %s", path.c_str());
         return fs.remove(path);
     }
