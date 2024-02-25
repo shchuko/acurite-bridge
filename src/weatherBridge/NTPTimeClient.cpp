@@ -12,7 +12,7 @@ static long ntpTimeSyncOkFlag = false;
 
 void NTPTimeClient::begin(WeatherBridgeSettings &settings) {
     const String& timezone = settings.getPosixTzString();
-    const char *timezoneString = timezone.isEmpty() ? "UTC-4" : timezone.c_str();
+    const char *timezoneString = timezone.isEmpty() ? "UTC" : timezone.c_str();
 
     setInitialTime(timezoneString);
 
