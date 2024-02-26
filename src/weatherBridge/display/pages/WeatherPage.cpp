@@ -23,7 +23,7 @@ void WeatherPage::paint(WeatherBridgeContext context) {
     delegate.setTextWrap(false);
     if (context.measurementsStore.getWindSpeedKmH().hasValue()) {
         float knots = kmPerHourToKnots(context.measurementsStore.getWindSpeedKmH().getValue());
-        sprintf(buf, "%.1f", knots);
+        sprintf(buf, "%.1fkts", knots);
         delegate.print(buf);
     } else {
         delegate.print("---kts");
@@ -69,7 +69,7 @@ void WeatherPage::paint(WeatherBridgeContext context) {
     delegate.setTextWrap(false);
     if (context.measurementsStore.getWindGustKmH().hasValue()) {
         float knots = kmPerHourToKnots(context.measurementsStore.getWindGustKmH().getValue());
-        sprintf(buf, "%.1f", knots);
+        sprintf(buf, "%.1fkts", knots);
         delegate.print(buf);
     } else {
         delegate.print("---kts");
