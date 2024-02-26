@@ -2,23 +2,27 @@
 
 #include "weatherBridge/StationMeasurements.hpp"
 #include "weatherBridge/TimedOptional.hpp"
+#include "weatherBridge/TimeExpiringList.hpp"
 #include "weatherBridge/types.hpp"
 
 class MeasurementsStore {
 private:
     // keep measurements for 2 minutes
-    static constexpr unsigned int timeoutMilli = 120 * 1000;
-
-    StationModel stationModel = StationModel::NOT_SELECTED;
+    static constexpr unsigned int measurementExpireTimeout = 2 * 60 * 1000;
+    static constexpr unsigned int windGustMeasurementWindow = 4 * 60 * 1000;
     int stationId = -1;
 
-    TimedOptional<int> rssi = TimedOptional<int>::empty(timeoutMilli);
-    TimedOptional<float> temperatureC = TimedOptional<float>::empty(timeoutMilli);
-    TimedOptional<float> windSpeedKmH = TimedOptional<float>::empty(timeoutMilli);
-    TimedOptional<float> windGustKmH = TimedOptional<float>::empty(timeoutMilli);
-    TimedOptional<float> windDirectorDeg = TimedOptional<float>::empty(timeoutMilli);
-    TimedOptional<float> rainMm = TimedOptional<float>::empty(timeoutMilli);
-    TimedOptional<int> humidity = TimedOptional<int>::empty(timeoutMilli);
+
+    StationModel stationModel = StationModel::NOT_SELECTED;
+    TimedOptional<int> rssi = TimedOptional<int>::empty(measurementExpireTimeout);
+    TimedOptional<float> temperatureC = TimedOptional<float>::empty(measurementExpireTimeout);
+    TimedOptional<float> windSpeedKmH = TimedOptional<float>::empty(measurementExpireTimeout);
+    TimedOptional<float> windDirectorDeg = TimedOptional<float>::empty(measurementExpireTimeout);
+    TimedOptional<float> rainMm = TimedOptional<float>::empty(measurementExpireTimeout);
+    TimedOptional<int> humidity = TimedOptional<int>::empty(measurementExpireTimeout);
+
+    TimedOptional<float> windGustKmH = TimedOptional<float>::empty(measurementExpireTimeout);
+    TimeExpiringList<float> windSpeedRecords = TimeExpiringList<float>(windGustMeasurementWindow);
 
 public:
     MeasurementsStore() = default;
@@ -28,7 +32,6 @@ public:
     void loop();
 
     void updateMeasurements(const StationMeasurements &measurements);
-
 
     StationModel getStationModel() const;
 

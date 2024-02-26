@@ -9,6 +9,9 @@ void MeasurementsStore::loop() {
     windDirectorDeg.maybeExpireValue();
     rainMm.maybeExpireValue();
     humidity.maybeExpireValue();
+    
+    windGustKmH.maybeExpireValue();
+    windSpeedRecords.loop();
 }
 
 void MeasurementsStore::updateMeasurements(const StationMeasurements &measurements) {
@@ -21,7 +24,12 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
         temperatureC.set(measurements.temperatureC.getValue());
     }
     if (measurements.windSpeedKmH.hasValue()) {
-        windSpeedKmH.set(measurements.windSpeedKmH.getValue());
+        float speed = measurements.windSpeedKmH.getValue();
+        windSpeedKmH.set(speed);
+        windSpeedRecords.add(speed);
+
+        std::vector<float> records = windSpeedRecords.getValues();
+        windGustKmH.set(*std::max_element(std::begin(records), std::end(records)));
     }
     if (measurements.windDirectorDeg.hasValue()) {
         windDirectorDeg.set(measurements.windDirectorDeg.getValue());
