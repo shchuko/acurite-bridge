@@ -13,9 +13,11 @@ static constexpr auto WINDY_API_KEY = "windy_api_key";
 static constexpr auto WINDY_STATION_ID = "windy_station_id";
 static constexpr auto WU_API_KEY = "wu_api_key";
 static constexpr auto WU_STATION_ID = "wu_station_id";
+static constexpr auto STATION_OPTIONS_PLACEHOLDER = "station_options";
+static constexpr auto SELECTED_STATION_FORM_FIELD = "station";
 
 
-void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore) {
+void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const AvailableStationsTracker &availableStationsTracker) {
     server.on("/", HTTP_GET, [&](AsyncWebServerRequest *request) {
         request->send(fs, "/settings.html", "text/html", false, [&](const String &var) -> String {
             auto settings = settingStore.getSettings();
@@ -43,6 +45,20 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore) {
                 return settings.getWuApiKey();
             } else if (var == WU_STATION_ID) {
                 return settings.getWuStationId();
+            } else if (var == STATION_OPTIONS_PLACEHOLDER) {
+                String result;
+                char buf[64];
+                for (const auto &pair: availableStationsTracker.getStations()) {
+                    switch (pair.first) {
+                        case StationModel::NOT_SELECTED:
+                            break;
+                        case StationModel::ACURITE_5N1:
+                            sprintf(buf, "<option label=\"Acurite 5n1 %d\">%d</option>", pair.second, pair.second);
+                            result += buf;
+                            break;
+                    }
+                }
+                return result;
             }
             return {};
         });
@@ -93,6 +109,8 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore) {
                     wuApiKey = p->value();
                 } else if (p->name() == WU_STATION_ID) {
                     wuStationId = p->value();
+                } else if (p->name() == SELECTED_STATION_FORM_FIELD) {
+                    selectedStationId = p->value();
                 }
             }
         }

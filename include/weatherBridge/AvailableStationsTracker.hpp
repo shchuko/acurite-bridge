@@ -17,4 +17,6 @@ public:
     void loop();
 
     void receiveData(const StationMeasurements &measurements);
+
+    std::vector<std::pair<StationModel, int>> getStations() const;
 };

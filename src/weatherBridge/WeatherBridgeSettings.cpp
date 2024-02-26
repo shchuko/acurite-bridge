@@ -143,6 +143,5 @@ const String &WeatherBridgeSettings::getPosixTzString() const {
 }
 
 const String &WeatherBridgeSettings::getSelectedStationId() const {
-    return *(new String(1356));
-//    return selectedStationId;
+    return selectedStationId;
 }

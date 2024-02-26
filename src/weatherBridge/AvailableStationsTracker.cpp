@@ -16,3 +16,7 @@ void AvailableStationsTracker::receiveData(const StationMeasurements &measuremen
         Log.noticeln("Detected new station, model=%d id=%d", measurements.stationModel, measurements.stationId);
     }
 }
+
+std::vector<std::pair<StationModel, int>> AvailableStationsTracker::getStations() const {
+    return stations.getValues();
+}

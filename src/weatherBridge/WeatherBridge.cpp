@@ -18,7 +18,7 @@ void WeatherBridge::begin() {
     if (configModeButton.isPressed()) {
         isConfigurationMode = true;
         wifiApStatus = WiFiAP::begin(settingsSnapshot);
-        settingsServer.startServer(fs, settingStore);
+        settingsServer.startServer(fs, settingStore, availableStationsTracker);
     } else {
         wifiClientConnector.begin(settingsSnapshot.getWlanSsid(), settingsSnapshot.getWlanPassword());
     }
