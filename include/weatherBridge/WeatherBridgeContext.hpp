@@ -1,6 +1,7 @@
 #pragma once
 
 #include "weatherBridge/wifi/ap/WiFiAPStatus.hpp"
+#include "weatherBridge/FSSettingStore.hpp"
 #include "weatherBridge/WeatherBridgeSettings.hpp"
 #include "weatherBridge/wifi/client/WiFiClientStatus.hpp"
 

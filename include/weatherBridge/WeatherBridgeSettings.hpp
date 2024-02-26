@@ -40,7 +40,11 @@ public:
 
     WeatherBridgeSettings(WeatherBridgeSettings &&other) noexcept;
 
+    WeatherBridgeSettings(const WeatherBridgeSettings &other);
+
     WeatherBridgeSettings &operator=(WeatherBridgeSettings &&other) noexcept;
+
+    WeatherBridgeSettings &operator=(const WeatherBridgeSettings &other) noexcept;
 
     const String &getWlanSsid() const;
 

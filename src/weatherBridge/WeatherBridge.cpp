@@ -1,26 +1,34 @@
 #include "weatherBridge/WeatherBridge.hpp"
 
-WeatherBridge::WeatherBridge(FS &fs, int configModeButtonPin) noexcept: settingStore(FSSettingStore(fs)),
-                                                                        configModeButton(InputPullUpButton(configModeButtonPin)) {}
+#include "weatherBridge/SettingsServer.hpp"
+
+WeatherBridge::WeatherBridge(FS &fs, int configModeButtonPin) noexcept
+        : fs(fs),
+          settingStore(FSSettingStore(fs)),
+          configModeButton(InputPullUpButton(configModeButtonPin)) {}
 
 void WeatherBridge::begin() {
+    settingStore.begin();
+    // Settings are applied only after reboot
+    settingsSnapshot = settingStore.getSettings();
+
     configModeButton.begin();
-    settings = settingStore.loadSettings();
     display.begin();
+
+    NTPTimeClient::begin(settingsSnapshot);
 
     if (configModeButton.isPressed()) {
         isConfigurationMode = true;
-        wifiApStatus = WiFiAP::begin(settings);
+        wifiApStatus = WiFiAP::begin(settingsSnapshot);
+        settingsServer.startServer(fs, settingStore);
     } else {
-        wifiClientConnector.begin(settings.getWlanSsid(), settings.getWlanPassword());
+        wifiClientConnector.begin(settingsSnapshot.getWlanSsid(), settingsSnapshot.getWlanPassword());
     }
-
-    NTPTimeClient::begin(settings);
 }
 
 void WeatherBridge::loop() {
+    settingStore.loop();
     ntpTimeSyncOk = NTPTimeClient::checkStatus();
     wifiConnectionStatus = wifiClientConnector.loop();
-
     display.refresh(context);
 }

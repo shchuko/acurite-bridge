@@ -44,6 +44,8 @@ WeatherBridgeSettings::WeatherBridgeSettings(WeatherBridgeSettings &&other) noex
         wuApiKey(std::move(other.wuApiKey)),
         wuStationId(std::move(other.wuStationId)) {}
 
+WeatherBridgeSettings::WeatherBridgeSettings(const WeatherBridgeSettings &other) = default;
+
 WeatherBridgeSettings &WeatherBridgeSettings::operator=(WeatherBridgeSettings &&other) noexcept {
     if (this != &other) {
         wlanSsid = std::move(other.wlanSsid);
@@ -59,6 +61,25 @@ WeatherBridgeSettings &WeatherBridgeSettings::operator=(WeatherBridgeSettings &&
         windyStationId = std::move(other.windyStationId);
         wuApiKey = std::move(other.wuApiKey);
         wuStationId = std::move(other.wuStationId);
+    }
+    return *this;
+}
+
+WeatherBridgeSettings &WeatherBridgeSettings::operator=(const WeatherBridgeSettings &other) noexcept {
+    if (this != &other) {
+        wlanSsid = other.wlanSsid;
+        wlanPassword = other.wlanPassword;
+        apSsid = other.apSsid;
+        apPassword = other.apPassword;
+        posixTzString = other.posixTzString;
+        pwsWeatherStationId = other.pwsWeatherStationId;
+        pwsWeatherApiKey = other.pwsWeatherApiKey;
+        windGuruStationUid = other.windGuruStationUid;
+        windGuruStationPassword = other.windGuruStationPassword;
+        windyApiKey = other.windyApiKey;
+        windyStationId = other.windyStationId;
+        wuApiKey = other.wuApiKey;
+        wuStationId = other.wuStationId;
     }
     return *this;
 }
@@ -115,3 +136,4 @@ const String &WeatherBridgeSettings::getWuStationId() const {
 const String &WeatherBridgeSettings::getPosixTzString() const {
     return posixTzString;
 }
+

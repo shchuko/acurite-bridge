@@ -19,6 +19,27 @@ static const String WU_STATION_ID = FS_SETTING_STORE_KEY("wu_id");
 
 FSSettingStore::FSSettingStore(FS &fs) noexcept: fs(fs) {}
 
+void FSSettingStore::begin() {
+    settingsSnapshot = loadSettings();
+}
+
+void FSSettingStore::loop() {
+    if (flushPending) {
+        writeSettings(settingsSnapshot);
+        flushPending = false;
+        ESP.restart();
+    }
+}
+
+WeatherBridgeSettings FSSettingStore::getSettings() const {
+    return settingsSnapshot;
+}
+
+void FSSettingStore::updateSettings(WeatherBridgeSettings &&settings) {
+    settingsSnapshot = settings;
+    flushPending = true;
+}
+
 WeatherBridgeSettings FSSettingStore::loadSettings() {
     return {
             readFile(WLAN_SSID),
@@ -88,12 +109,15 @@ String FSSettingStore::readFile(const String &path) {
 }
 
 bool FSSettingStore::writeFile(const String &path, const String &message) {
-    if (message.isEmpty() && fs.exists(path)) {
-        Log.traceln("Removing file %s", path.c_str());
-        return fs.remove(path);
+    if (message.isEmpty()) {
+        if (fs.exists(path)) {
+            Log.traceln("Removing file %s", path.c_str());
+            return fs.remove(path);
+        }
+        return true;
     }
 
-    Log.traceln("Writing file %s", path.c_str());
+    Log.traceln("Writing file %s, content=%s", path.c_str(), message.c_str());
     File file = fs.open(path, FILE_WRITE);
     if (!file) {
         Log.traceln("Failed to open file %s for writing", path.c_str());

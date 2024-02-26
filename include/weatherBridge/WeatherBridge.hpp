@@ -14,30 +14,35 @@
 #include "weatherBridge/display/WeatherBridgeDisplay.hpp"
 #include "weatherBridge/NTPTimeClient.hpp"
 #include "weatherBridge/wifi/client/WiFiClientConnector.hpp"
+#include "SettingsServer.hpp"
 
 class WeatherBridge {
 private:
-    FSSettingStore settingStore;
+    fs::FS &fs;
     InputPullUpButton configModeButton;
 
-    WeatherBridgeSettings settings = WeatherBridgeSettings();
     bool isConfigurationMode = false;
     bool ntpTimeSyncOk = false;
 
     WeatherBridgeDisplay display = WeatherBridgeDisplay();
 
+    SettingsServer settingsServer = SettingsServer();
     WiFiAPStatus wifiApStatus = WiFiAPStatus();
+
     WiFiClientConnector wifiClientConnector = WiFiClientConnector();
     WiFiClientStatus wifiConnectionStatus = WiFiClientStatus();
 
+    FSSettingStore settingStore;
+    WeatherBridgeSettings settingsSnapshot;
+
     WeatherBridgeContext context = WeatherBridgeContext(isConfigurationMode,
                                                         wifiApStatus,
-                                                        settings,
+                                                        settingsSnapshot,
                                                         ntpTimeSyncOk,
                                                         wifiConnectionStatus);
 
 public:
-    WeatherBridge(fs::FS &fs,int configModeButtonPin) noexcept;
+    WeatherBridge(fs::FS &fs, int configModeButtonPin) noexcept;
 
     void begin();
 
