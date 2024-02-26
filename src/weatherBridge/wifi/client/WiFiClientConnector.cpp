@@ -1,10 +1,12 @@
 #include "weatherBridge/wifi/client/WiFiClientConnector.hpp"
 
 WiFiClientStatus WiFiClientConnector::loop() noexcept {
+    int8_t rssi;
     switch (WiFiClass::status()) {
         case WL_CONNECTED:
             lastConnectionRefresh = millis();
-            return WiFiClientStatus(rssiToSignalValue(WiFi.RSSI()), WiFi.SSID());
+            rssi = WiFi.RSSI();
+            return WiFiClientStatus(rssiToSignalValue(rssi), WiFi.SSID(), rssi);
         case WL_CONNECT_FAILED:
         case WL_NO_SSID_AVAIL:
         case WL_IDLE_STATUS:
@@ -17,7 +19,7 @@ WiFiClientStatus WiFiClientConnector::loop() noexcept {
                 WiFi.reconnect();
                 lastConnectionRefresh = millis();
             }
-            return WiFiClientStatus(WifiSignal::NO_CONNECTION, WiFi.SSID());
+            return WiFiClientStatus(WifiSignal::NO_CONNECTION, WiFi.SSID(), 0);
     }
 }
 

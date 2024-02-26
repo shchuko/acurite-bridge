@@ -68,6 +68,7 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
         delegate.setCursor(22, 3);
         delegate.setTextWrap(false);
         const String &activeSsid = context.wifiConnectionStatus.getSsid();
+        int rssi = context.wifiConnectionStatus.getRSSI();
         const String &settingsSsid = context.settings.getWlanSsid();
 
         if (!activeSsid.isEmpty()) {
@@ -84,6 +85,16 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
         delegate.setTextWrap(false);
         if (!activeSsid.isEmpty() || !settingsSsid.isEmpty()) {
             delegate.print(getWifiSignalName(context.wifiConnectionStatus.getSignalLevel()));
+        } else {
+            delegate.print("");
+        }
+
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(22, 21);
+        delegate.setTextWrap(false);
+        if (!activeSsid.isEmpty()) {
+            delegate.printf("RSSI: %d", rssi);
         } else {
             delegate.print("");
         }
