@@ -2,6 +2,11 @@
 
 #include <cstdint>
 
+enum class StationModel {
+    NOT_SELECTED,
+    ACURITE_5N1
+};
+
 enum class WifiSignal {
     BAD, NORMAL, GOOD, NO_CONNECTION
 };

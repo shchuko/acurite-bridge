@@ -16,6 +16,7 @@ static const String WINDY_API_KEY = FS_SETTING_STORE_KEY("windy_key");
 static const String WINDY_STATION_ID = FS_SETTING_STORE_KEY("windy_id");
 static const String WU_API_KEY = FS_SETTING_STORE_KEY("wu_key");
 static const String WU_STATION_ID = FS_SETTING_STORE_KEY("wu_id");
+static const String SELECTED_STATION_ID = FS_SETTING_STORE_KEY("selected_station_id");
 
 FSSettingStore::FSSettingStore(FS &fs) noexcept: fs(fs) {}
 
@@ -54,7 +55,8 @@ WeatherBridgeSettings FSSettingStore::loadSettings() {
             readFile(WINDY_API_KEY),
             readFile(WINDY_STATION_ID),
             readFile(WU_API_KEY),
-            readFile(WU_STATION_ID)
+            readFile(WU_STATION_ID),
+            readFile(SELECTED_STATION_ID)
     };
 }
 
@@ -73,6 +75,7 @@ bool FSSettingStore::writeSettings(WeatherBridgeSettings &settings) {
     bool windyStationIdWriteRes = writeFile(WINDY_STATION_ID, settings.getWindyStationId());
     bool wuApiKeyWriteRes = writeFile(WU_API_KEY, settings.getWuApiKey());
     bool wuStationIdWriteRes = writeFile(WU_STATION_ID, settings.getWuStationId());
+    bool selectedStationIdWriteRes = writeFile(SELECTED_STATION_ID, settings.getSelectedStationId());
 
     return wlanSsidWriteRes
            && wlanPasswordWriteRes
@@ -86,7 +89,8 @@ bool FSSettingStore::writeSettings(WeatherBridgeSettings &settings) {
            && windyApiKeyWriteRes
            && windyStationIdWriteRes
            && wuApiKeyWriteRes
-           && wuStationIdWriteRes;
+           && wuStationIdWriteRes
+           && selectedStationIdWriteRes;
 }
 
 String FSSettingStore::readFile(const String &path) {

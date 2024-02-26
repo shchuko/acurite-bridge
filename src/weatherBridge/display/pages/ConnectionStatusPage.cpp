@@ -96,12 +96,13 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
     delegate.setTextSize(1);
     delegate.setCursor(21, 35);
     delegate.setTextWrap(false);
-    delegate.print(F("Acurite 5n1"));
+    delegate.print("Acurite 5n1");
 
     delegate.setTextColor(1);
     delegate.setTextSize(1);
     delegate.setCursor(21, 44);
     delegate.setTextWrap(false);
+    // TODO read signal
     delegate.print(getStationSignalName(StationSignal::NO_CONNECTION));
 
     delegate.setTextColor(1);
@@ -114,7 +115,12 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
     delegate.setTextSize(1);
     delegate.setCursor(42, 53);
     delegate.setTextWrap(false);
-    delegate.print(F("Station1234"));
+    if (context.settings.getSelectedStationId().isEmpty()) {
+        delegate.println(context.settings.getSelectedStationId());
+    } else {
+        delegate.print(F("Not Set"));
+    }
+
 }
 
 String ConnectionStatusPage::getWifiSignalName(WifiSignal signal) {

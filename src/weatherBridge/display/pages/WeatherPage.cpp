@@ -1,5 +1,5 @@
 #include "weatherBridge/display/pages/WeatherPage.hpp"
-
+#include "weatherBridge/units.hpp"
 
 static const unsigned char PROGMEM image_weather_temperature_bits[] = {0x1c, 0x00, 0x22, 0x02, 0x2b, 0x05, 0x2a,
                                                                        0x02, 0x2b, 0x38, 0x2a, 0x60, 0x2b, 0x40,
@@ -15,32 +15,64 @@ static const unsigned char PROGMEM image_weather_wind_bits[] = {0x00, 0x00, 0x00
 WeatherPage::WeatherPage(Adafruit_GFX &display) : DisplayPage(display) {}
 
 void WeatherPage::paint(WeatherBridgeContext context) {
+    char buf[10];
     delegate.drawBitmap(9, 5, image_weather_temperature_bits, 16, 16, 1);
     delegate.setTextColor(1);
     delegate.setTextSize(2);
     delegate.setCursor(29, 26);
     delegate.setTextWrap(false);
-    delegate.print("50.5kts"); // Speed
+    if (context.measurementsStore.getWindSpeedKmH().hasValue()) {
+        float knots = kmPerHourToKnots(context.measurementsStore.getWindSpeedKmH().getValue());
+        sprintf(buf, "%.1f", knots);
+        delegate.print(buf);
+    } else {
+        delegate.print("---kts");
+    }
+
     delegate.setTextColor(1);
     delegate.setTextSize(2);
     delegate.setCursor(29, 6);
     delegate.setTextWrap(false);
-    delegate.print("+25.7C");
+    if (context.measurementsStore.getTemperatureC().hasValue()) {
+        float tempC = context.measurementsStore.getTemperatureC().getValue();
+        if (tempC > 0.0) {
+            sprintf(buf, "+%.1fC", tempC);
+        } else {
+            sprintf(buf, "%.1fC", tempC);
+        }
+        delegate.print(buf);
+    } else {
+        delegate.print("---C");
+    }
+
     delegate.drawBitmap(8, 24, image_weather_wind_bits, 15, 16, 1);
     delegate.setTextColor(1);
     delegate.setTextSize(1);
     delegate.setCursor(29, 42);
     delegate.setTextWrap(false);
     delegate.print("Gust");
+
     delegate.setTextColor(1);
     delegate.setTextSize(1);
     delegate.setCursor(29, 51);
     delegate.setTextWrap(false);
-    delegate.print("NNW");
+    if (context.measurementsStore.getWindDirectorDeg().hasValue()) {
+        float directionDegrees = context.measurementsStore.getWindDirectorDeg().getValue();
+        delegate.print(convertDegreesToWindDirection(directionDegrees));
+    } else {
+        delegate.print("---");
+    }
+
     delegate.setTextColor(1);
     delegate.setTextSize(1);
     delegate.setCursor(56, 42);
     delegate.setTextWrap(false);
-    delegate.print("50.7kts"); // Gust
+    if (context.measurementsStore.getWindGustKmH().hasValue()) {
+        float knots = kmPerHourToKnots(context.measurementsStore.getWindGustKmH().getValue());
+        sprintf(buf, "%.1f", knots);
+        delegate.print(buf);
+    } else {
+        delegate.print("---kts");
+    }
 }
 

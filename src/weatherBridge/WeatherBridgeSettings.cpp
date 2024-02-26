@@ -13,7 +13,8 @@ WeatherBridgeSettings::WeatherBridgeSettings(
         const String &&windyApiKey,
         const String &&windyStationId,
         const String &&wuApiKey,
-        const String &&wuStationId
+        const String &&wuStationId,
+        const String &&selectedStationId
 ) : wlanSsid(wlanSsid),
     wlanPassword(wlanPassword),
     apSsid(apSsid.isEmpty() ? String(DEFAULT_AP_NAME) : apSsid),
@@ -26,7 +27,8 @@ WeatherBridgeSettings::WeatherBridgeSettings(
     windyApiKey(windyApiKey),
     windyStationId(windyStationId),
     wuApiKey(wuApiKey),
-    wuStationId(wuStationId) {}
+    wuStationId(wuStationId),
+    selectedStationId(selectedStationId) {}
 
 
 WeatherBridgeSettings::WeatherBridgeSettings(WeatherBridgeSettings &&other) noexcept:
@@ -42,7 +44,8 @@ WeatherBridgeSettings::WeatherBridgeSettings(WeatherBridgeSettings &&other) noex
         windyApiKey(std::move(other.windyApiKey)),
         windyStationId(std::move(other.windyStationId)),
         wuApiKey(std::move(other.wuApiKey)),
-        wuStationId(std::move(other.wuStationId)) {}
+        wuStationId(std::move(other.wuStationId)),
+        selectedStationId(std::move(other.selectedStationId)) {}
 
 WeatherBridgeSettings::WeatherBridgeSettings(const WeatherBridgeSettings &other) = default;
 
@@ -61,6 +64,7 @@ WeatherBridgeSettings &WeatherBridgeSettings::operator=(WeatherBridgeSettings &&
         windyStationId = std::move(other.windyStationId);
         wuApiKey = std::move(other.wuApiKey);
         wuStationId = std::move(other.wuStationId);
+        selectedStationId = std::move(other.selectedStationId);
     }
     return *this;
 }
@@ -80,6 +84,7 @@ WeatherBridgeSettings &WeatherBridgeSettings::operator=(const WeatherBridgeSetti
         windyStationId = other.windyStationId;
         wuApiKey = other.wuApiKey;
         wuStationId = other.wuStationId;
+        selectedStationId = other.selectedStationId;
     }
     return *this;
 }
@@ -137,3 +142,6 @@ const String &WeatherBridgeSettings::getPosixTzString() const {
     return posixTzString;
 }
 
+const String &WeatherBridgeSettings::getSelectedStationId() const {
+    return selectedStationId;
+}

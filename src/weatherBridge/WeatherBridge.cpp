@@ -1,5 +1,4 @@
 #include "weatherBridge/WeatherBridge.hpp"
-
 #include "weatherBridge/SettingsServer.hpp"
 
 WeatherBridge::WeatherBridge(FS &fs, int configModeButtonPin) noexcept
@@ -11,7 +10,6 @@ void WeatherBridge::begin() {
     settingStore.begin();
     // Settings are applied only after reboot
     settingsSnapshot = settingStore.getSettings();
-
     configModeButton.begin();
     display.begin();
 
@@ -24,11 +22,34 @@ void WeatherBridge::begin() {
     } else {
         wifiClientConnector.begin(settingsSnapshot.getWlanSsid(), settingsSnapshot.getWlanPassword());
     }
+
+    if (!settingsSnapshot.getSelectedStationId().isEmpty()) {
+        measurementsStore = MeasurementsStore(StationModel::ACURITE_5N1,
+                                              settingsSnapshot.getSelectedStationId().toInt());
+    }
+
+    measurementsStore = MeasurementsStore(StationModel::ACURITE_5N1,
+                                          1356);
+    rfReceiver.begin();
+    acurite5N1Receiver.registerCallback([&](const StationMeasurements &measurements) {
+        measurementsStore.updateMeasurements(measurements);
+        availableStationsTracker.receiveData(measurements);
+    });
 }
 
 void WeatherBridge::loop() {
     settingStore.loop();
-    ntpTimeSyncOk = NTPTimeClient::checkStatus();
+
+    measurementsStore.loop();
+    availableStationsTracker.loop();
+    rfReceiver.loop();
+
     wifiConnectionStatus = wifiClientConnector.loop();
+    ntpTimeSyncOk = NTPTimeClient::checkStatus();
+
+    while (rfReceiver.available()) {
+        acurite5N1Receiver.receiveMessage(rfReceiver.read());
+    }
+
     display.refresh(context);
 }

@@ -64,6 +64,7 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore) {
         String wuApiKey = "";
         String wuStationId = "";
         String posixTzString = "";
+        String selectedStationId = "";
 
         for (int i = 0; i < params; i++) {
             AsyncWebParameter *p = request->getParam(i);
@@ -111,7 +112,8 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore) {
                 std::move(windyApiKey),
                 std::move(windyStationId),
                 std::move(wuApiKey),
-                std::move(wuStationId)
+                std::move(wuStationId),
+                std::move(selectedStationId)
         );
         settingStore.updateSettings(std::move(settings));
     });

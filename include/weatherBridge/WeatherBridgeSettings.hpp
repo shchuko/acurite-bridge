@@ -19,6 +19,7 @@ private:
     String wuApiKey = "";
     String wuStationId = "";
     String posixTzString = "";
+    String selectedStationId = "";
 
 public:
     WeatherBridgeSettings() = default;
@@ -35,7 +36,8 @@ public:
                           const String &&windyApiKey,
                           const String &&windyStationId,
                           const String &&wuApiKey,
-                          const String &&wuStationId
+                          const String &&wuStationId,
+                          const String &&selectedStationId
     );
 
     WeatherBridgeSettings(WeatherBridgeSettings &&other) noexcept;
@@ -71,4 +73,6 @@ public:
     const String &getApSsid() const;
 
     const String &getApPassword() const;
+
+    const String &getSelectedStationId() const;
 };
