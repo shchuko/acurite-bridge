@@ -49,5 +49,6 @@ void WeatherBridge::loop() {
         acurite5N1Receiver.receiveMessage(rfReceiver.read());
     }
 
+    exportersContainer.loop(context);
     display.refresh(context);
 }
