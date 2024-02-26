@@ -39,7 +39,7 @@ void NTPTimeClient::setInitialTime(const char *timezoneString) {
 
     struct tm tmstruct{0};
     tmstruct.tm_year = (2022 - 1900);
-    tmstruct.tm_mon = (1 - 1);
+    tmstruct.tm_mon = (9 - 1);
     tmstruct.tm_mday = 15;
     tmstruct.tm_hour = 12;
     tmstruct.tm_min = 1;
