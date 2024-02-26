@@ -109,6 +109,24 @@
             input.type = "password";
         }
     }
+
+    document.getElementById('settingsForm').onsubmit = function() {
+        const wifiApSsid = document.getElementById('wifi_ap_ssid').value;
+        const wifiApPassword = document.getElementById('wifi_ap_password').value;
+        const isValidSsid = /^[0-9a-zA-Z-_]{4,10}$/.test(wifiApSsid);
+        const isValidPassword = wifiApPassword.length === 0 || /^[0-9a-zA-Z-_]{8,10}$/.test(wifiApPassword);
+
+        if (!isValidSsid) {
+            alert('AP SSID must be at least 4 characters and at most 10 characters long. It should only contain alphanumeric characters or "-" or "_"');
+            return false;
+        }
+        if (!isValidPassword) {
+            alert('AP Password must be at least 8 characters and at most 10 characters long. It should only contain alphanumeric characters or "-" or "_"');
+            return false;
+        }
+
+        return true;
+    };
 </script>
 </body>
 
