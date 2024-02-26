@@ -47,6 +47,7 @@ public:
     void set(T val) {
         isPresent = true;
         value = val;
+        lastUpdated = millis();
     }
 
 };
