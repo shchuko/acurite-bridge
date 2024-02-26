@@ -28,8 +28,6 @@ void WeatherBridge::begin() {
                                               settingsSnapshot.getSelectedStationId().toInt());
     }
 
-    measurementsStore = MeasurementsStore(StationModel::ACURITE_5N1,
-                                          1356);
     rfReceiver.begin();
     acurite5N1Receiver.registerCallback([&](const StationMeasurements &measurements) {
         measurementsStore.updateMeasurements(measurements);

@@ -16,7 +16,4 @@ public:
     void begin(const String &ssid, const String &password) noexcept;
 
     WiFiClientStatus loop() noexcept;
-
-private:
-    static WifiSignal rssiToSignalValue(int8_t rssi) noexcept;
 };

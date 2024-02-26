@@ -13,10 +13,12 @@ static const unsigned char PROGMEM image_cloud_bits[] = {0x00, 0x00, 0x00, 0x07,
                                                          0x00, 0x80, 0x00, 0x80, 0x40, 0x00, 0x80, 0x3f, 0xff, 0x00,
                                                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-static const unsigned char PROGMEM image_network_bits[] = {0x00, 0x0e, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0xea,
-                                                           0x00, 0xaa, 0x00, 0xaa, 0x00, 0xaa, 0x0e, 0xaa, 0x0a, 0xaa,
-                                                           0x0a, 0xaa, 0x0a, 0xaa, 0xea, 0xaa, 0xaa, 0xaa, 0xee, 0xee,
-                                                           0x00, 0x00};
+
+static const unsigned char PROGMEM image_wifi_bits[] = {0x01, 0xf0, 0x00, 0x06, 0x0c, 0x00, 0x18, 0x03, 0x00, 0x21,
+                                                        0xf0, 0x80, 0x46, 0x0c, 0x40, 0x88, 0x02, 0x20, 0x10, 0xe1,
+                                                        0x00, 0x23, 0x18, 0x80, 0x04, 0x04, 0x00, 0x08, 0x42, 0x00,
+                                                        0x01, 0xb0, 0x00, 0x02, 0x08, 0x00, 0x00, 0x40, 0x00, 0x00,
+                                                        0xa0, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00};
 
 
 ConnectionStatusPage::ConnectionStatusPage(Adafruit_GFX &display) : DisplayPage(display) {}
@@ -47,8 +49,6 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
             } else {
                 delegate.print("PWD: " + context.wifiApContext.getPassword());
             }
-        } else {
-            delegate.print("");
         }
 
         delegate.setTextColor(1);
@@ -61,15 +61,16 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
             delegate.print("");
         }
     } else {
-        delegate.drawBitmap(3, 7, image_network_bits, 14, 16, 1);
+        delegate.drawBitmap(1, 7, image_wifi_bits, 19, 16, 1);
 
         delegate.setTextColor(1);
         delegate.setTextSize(1);
         delegate.setCursor(22, 3);
         delegate.setTextWrap(false);
-        const String &activeSsid = context.wifiConnectionStatus.getSsid();
-        int rssi = context.wifiConnectionStatus.getRSSI();
         const String &settingsSsid = context.settings.getWlanSsid();
+        const String &activeSsid = context.wifiConnectionStatus.getSsid();
+        bool isConnected = context.wifiConnectionStatus.isConnected();
+        int rssi = context.wifiConnectionStatus.getRSSI();
 
         if (!activeSsid.isEmpty()) {
             delegate.print(activeSsid);
@@ -83,79 +84,48 @@ void ConnectionStatusPage::paint(WeatherBridgeContext context) {
         delegate.setTextSize(1);
         delegate.setCursor(22, 12);
         delegate.setTextWrap(false);
-        if (!activeSsid.isEmpty() || !settingsSsid.isEmpty()) {
-            delegate.print(getWifiSignalName(context.wifiConnectionStatus.getSignalLevel()));
-        } else {
-            delegate.print("");
-        }
-
-        delegate.setTextColor(1);
-        delegate.setTextSize(1);
-        delegate.setCursor(22, 21);
-        delegate.setTextWrap(false);
-        if (!activeSsid.isEmpty()) {
+        if (isConnected) {
             delegate.printf("RSSI: %d", rssi);
-        } else {
-            delegate.print("");
+        } else if (!activeSsid.isEmpty() || !settingsSsid.isEmpty()) {
+            delegate.print("Not connected");
         }
     }
 
     // Station details
+    const String &stationId = context.settings.getSelectedStationId();
+    bool isStationSelected = !stationId.isEmpty();
+    int isConnected = context.measurementsStore.getRssi().hasValue();
+    int rssi = isConnected ? context.measurementsStore.getRssi().getValue() : 0;
+
     delegate.drawBitmap(2, 42, image_cloud_bits, 17, 16, 1);
 
     delegate.setTextColor(1);
     delegate.setTextSize(1);
     delegate.setCursor(21, 35);
     delegate.setTextWrap(false);
-    delegate.print("Acurite 5n1");
+    if (isStationSelected) {
+        delegate.print("Acurite 5n1");
+    } else {
+        delegate.print("Not Configured");
+    }
 
-    delegate.setTextColor(1);
-    delegate.setTextSize(1);
-    delegate.setCursor(21, 44);
-    delegate.setTextWrap(false);
-    // TODO read signal
-    delegate.print(getStationSignalName(StationSignal::NO_CONNECTION));
+    if (isStationSelected) {
+        delegate.setTextColor(1);
+        delegate.setTextSize(1);
+        delegate.setCursor(21, 44);
+        delegate.setTextWrap(false);
+
+        delegate.printf("ID: %s", stationId.c_str());
+    }
 
     delegate.setTextColor(1);
     delegate.setTextSize(1);
     delegate.setCursor(21, 53);
     delegate.setTextWrap(false);
-    delegate.print("ID:");
-
-    delegate.setTextColor(1);
-    delegate.setTextSize(1);
-    delegate.setCursor(42, 53);
-    delegate.setTextWrap(false);
-    if (context.settings.getSelectedStationId().isEmpty()) {
-        delegate.println(context.settings.getSelectedStationId());
-    } else {
-        delegate.print(F("Not Set"));
-    }
-
-}
-
-String ConnectionStatusPage::getWifiSignalName(WifiSignal signal) {
-    switch (signal) {
-        case WifiSignal::BAD:
-            return F("Signal: BAD");
-        case WifiSignal::NORMAL:
-            return F("Signal: NORMAL");
-        case WifiSignal::GOOD:
-            return F("Signal: GOOD");
-        case WifiSignal::NO_CONNECTION:
-            return F("NOT CONNECTED");
+    if (isConnected) {
+        delegate.printf("RSSI: %d", rssi);
+    } else if (isStationSelected) {
+        delegate.print("No connection");
     }
 }
 
-String ConnectionStatusPage::getStationSignalName(StationSignal signal) {
-    switch (signal) {
-        case StationSignal::BAD:
-            return F("Signal: BAD");
-        case StationSignal::NORMAL:
-            return F("Signal: NORMAL");
-        case StationSignal::GOOD:
-            return F("Signal: GOOD");
-        case StationSignal::NO_CONNECTION:
-            return F("NOT CONNECTED");
-    }
-}

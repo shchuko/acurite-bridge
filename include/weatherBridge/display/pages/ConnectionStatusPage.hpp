@@ -10,8 +10,7 @@ public:
 
 private:
     void paint(WeatherBridgeContext context) override;
-private:
-    static String getWifiSignalName(WifiSignal signal);
 
-    static String getStationSignalName(StationSignal signal);
+private:
+    static const char *rssiToSignalString(int rssi) noexcept;
 };

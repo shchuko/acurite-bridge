@@ -5,14 +5,14 @@
 
 class WiFiClientStatus {
 private:
+    bool isConnectedFlag = false;
     int rssi = 0;
-    WifiSignal signalLevel = WifiSignal::NO_CONNECTION;
     String ssid = "";
 
 public:
     WiFiClientStatus() = default;
 
-    explicit WiFiClientStatus(WifiSignal signalLevel, String &&ssid, int rssi);
+    explicit WiFiClientStatus(String &&ssid, bool isConnected, int rssi);
 
     WiFiClientStatus(WiFiClientStatus &&other) noexcept;
 
@@ -20,7 +20,7 @@ public:
 
     int getRSSI() const;
 
-    WifiSignal getSignalLevel() const;
+    bool isConnected() const;
 
     const String &getSsid() const;
 };
