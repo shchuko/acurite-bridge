@@ -13,7 +13,7 @@
     <div class="form-section">
         <label for="wifi_ssid">SSID:</label>
         <input type="text" id="wifi_ssid" name="wifi_ssid" value="%wifi_ssid%">
-        <label for="wifi_password">Password:</label>
+        <label for="wifi_password">Password (leave empty if not required):</label>
         <div class="input-reveal-container">
             <input type="password" id="wifi_password" name="wifi_password" value="%wifi_password%">
             <button type="button" onclick="revealPassword('wifi_password')" class="reveal-button">Reveal</button>
@@ -24,7 +24,7 @@
     <div class="form-section">
         <label for="wifi_ap_ssid">SSID:</label>
         <input type="text" id="wifi_ap_ssid" name="wifi_ap_ssid" value="%wifi_ap_ssid%">
-        <label for="wifi_ap_password">Password:</label>
+        <label for="wifi_ap_password">Password (leave empty to disable):</label>
         <div class="input-reveal-container">
             <input type="password" id="wifi_ap_password" name="wifi_ap_password" value="%wifi_ap_password%">
             <button type="button" onclick="revealPassword('wifi_ap_password')" class="reveal-button">Reveal</button>
