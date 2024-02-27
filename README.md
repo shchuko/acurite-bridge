@@ -5,7 +5,7 @@ Receives Acurite 5n1 station measurements and uploads them to multiple weather s
 * [How to assemble](#assemble).
 * [How to configure data export](#configuring-data-export).
 
-![front](docs/front.jpg)
+![front](docs/front.png)
 
 Supported weather services:
 
@@ -18,7 +18,7 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
 
 ## Assemble
 
-1. Connect a button between GPIO4 and GND. ![disassembled](docs/disasambled.jpg)
+1. Connect a button between GPIO4 and GND. ![disassembled](docs/disassembled.png)
 2. Connect ESP32 to PC.
 3. Run  `Upload Filesystem Image` and `Upload` PlatformIO targets
 4. Find ESP32 started and showing info.
