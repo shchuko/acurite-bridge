@@ -20,23 +20,6 @@
         </div>
     </div>
 
-    <h2>Configuration mode Wi-Fi AP Settings</h2>
-    <div class="form-section">
-        <label for="wifi_ap_ssid">SSID:</label>
-        <input type="text" id="wifi_ap_ssid" name="wifi_ap_ssid" value="%wifi_ap_ssid%">
-        <label for="wifi_ap_password">Password (leave empty to disable):</label>
-        <div class="input-reveal-container">
-            <input type="password" id="wifi_ap_password" name="wifi_ap_password" value="%wifi_ap_password%">
-            <button type="button" onclick="revealPassword('wifi_ap_password')" class="reveal-button">Reveal</button>
-        </div>
-    </div>
-
-    <h2>Time Settings</h2>
-    <div class="form-section">
-        <label for="timezone_str">POSIX Timezone string:</label>
-        <input type="text" id="timezone_str" name="timezone_str" value="%timezone_str%">
-    </div>
-
     <h2>Weather Station Settings</h2>
     <div class="form-section">
         <label for="station">Weather Station (refresh page to get updated list):</label>
@@ -89,13 +72,31 @@
     <div class="form-section">
         <h3>Weather Underground</h3>
         <label for="wu_api_key">API KEY:</label>
+        <label for="wu_station_id">Station ID:</label>
+        <input type="text" id="wu_station_id" name="wu_station_id" value="%wu_station_id%">
         <div class="input-reveal-container">
             <input type="password" id="wu_api_key" name="wu_api_key" value="%wu_api_key%">
             <button type="button" onclick="revealPassword('wu_api_key')" class="reveal-button">Reveal</button>
         </div>
-        <label for="wu_station_id">Station ID:</label>
-        <input type="text" id="wu_station_id" name="wu_station_id" value="%wu_station_id%">
     </div>
+
+    <h2>Time Settings</h2>
+    <div class="form-section">
+        <label for="timezone_str">POSIX Timezone string:</label>
+        <input type="text" id="timezone_str" name="timezone_str" value="%timezone_str%">
+    </div>
+
+    <h2>Configuration mode Wi-Fi AP Settings</h2>
+    <div class="form-section">
+        <label for="wifi_ap_ssid">SSID:</label>
+        <input type="text" id="wifi_ap_ssid" name="wifi_ap_ssid" value="%wifi_ap_ssid%">
+        <label for="wifi_ap_password">Password (leave empty to disable):</label>
+        <div class="input-reveal-container">
+            <input type="password" id="wifi_ap_password" name="wifi_ap_password" value="%wifi_ap_password%">
+            <button type="button" onclick="revealPassword('wifi_ap_password')" class="reveal-button">Reveal</button>
+        </div>
+    </div>
+
     <input type="submit" value="Save Settings" class="submit-button">
 </form>
 
