@@ -1,6 +1,6 @@
 # Acurite 5n1 -> Weather Services Forwarder
 
-Receives Acurite 5n1 station measurements and uploads them to multiple weather services.
+Receives AcuRite 5n1 Weather Station measurements and uploads them to multiple weather services.
 
 * [How to assemble](#assemble).
 * [How to configure data export](#configuring-data-export).
@@ -36,7 +36,7 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
    <img src="docs/configsite.png" alt="configsite">
 6. Enter your Wi-Fi Network Name (SSID) and Password.
 7. Select *Weather Station* from the list (the device will listen for station signals, to get updated list refresh the
-   page). Currently supported Acurite 5n1 only.
+   page). Currently supported AcuRite 5n1 only.
 8. Fill weather service credentials. Missing credentials will simply
 9. If you're not in UTC timezone, please specify your timezone in POSIX format, see
    the [documentation](https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html).
@@ -59,8 +59,8 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
   to have it simply working in short time :)
 * To reduce memory consumption, the code contains
   shrunk [port of rtl_433 library](https://github.com/NorthernMan54/rtl_433_ESP) copied directly to [lib/](lib).
-* It's pretty easy to support other stations (not Acurite 5n1 only), but there was not really reasonable to have this in
+* It's pretty easy to support other stations (not AcuRite 5n1 only), but there was not really reasonable to have this in
   current use case.
-* Precipitation measurements from Acurite 5n1 are received in weird time window, to be investigated whether they're
+* Precipitation measurements from AcuRite 5n1 are received in weird time window, to be investigated whether they're
   interpreted correctly. The device may report garbage instead of `rainmm` measurements to weather services. 
 
