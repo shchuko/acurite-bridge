@@ -11,6 +11,8 @@ void MeasurementsStore::loop() {
     humidity.maybeExpireValue();
     
     windGustKmH.maybeExpireValue();
+    windMinKmH.maybeExpireValue();
+    windAvgKmH.maybeExpireValue();
     windSpeedRecords.loop();
 }
 
@@ -30,6 +32,12 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
 
         std::vector<float> records = windSpeedRecords.getValues();
         windGustKmH.set(*std::max_element(std::begin(records), std::end(records)));
+        windGustKmH.set(*std::min_element(std::begin(records), std::end(records)));
+        double sum = 0.0;
+        for (const auto &item: records) {
+            sum += item;
+        }
+        windAvgKmH.set(static_cast<float>(sum / records.size()));
     }
     if (measurements.windDirectorDeg.hasValue()) {
         windDirectorDeg.set(measurements.windDirectorDeg.getValue());
@@ -76,4 +84,12 @@ const TimedOptional<float> &MeasurementsStore::getRainMm() const {
 
 const TimedOptional<int> &MeasurementsStore::getHumidity() const {
     return humidity;
+}
+
+const TimedOptional<float> &MeasurementsStore::getWindMinKmH() const {
+    return windMinKmH;
+}
+
+const TimedOptional<float> &MeasurementsStore::getWindAvgKmH() const {
+    return windAvgKmH;
 }

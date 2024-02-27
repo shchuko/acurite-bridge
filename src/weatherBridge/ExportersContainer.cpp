@@ -1,4 +1,6 @@
 #include <HTTPClient.h>
+#include <MD5Builder.h>
+
 #include "weatherBridge/ExportersContainer.hpp"
 #include "weatherBridge/WeatherBridgeContext.hpp"
 #include "weatherBridge/units.hpp"
@@ -158,7 +160,75 @@ void ExportersContainer::windyGuruExport(const WeatherBridgeContext &context) {
         windGuruExporterStatus = WeatherExporterStatus::OFF;
     }
 
-    windGuruExporterStatus = WeatherExporterStatus::ERROR;
+    if (millis() - windGuruLastUpdated < WIND_GURU_UPDATE_INTERVAL) {
+        return;
+    }
+
+    const MeasurementsStore &measurements = context.measurementsStore;
+    if (!measurements.getRssi().hasValue()) {
+        windGuruExporterStatus = WeatherExporterStatus::NO_DATA;
+        return;
+    }
+
+    String request = "https://www.windguru.cz/upload/api.php";
+    request += "?uid=" + stationUid;
+
+    char salt[25];
+    sprintf(salt, "%ld", time(nullptr));
+    request += "&salt=";
+    request += salt;
+
+    MD5Builder hashBuilder{};
+    hashBuilder.begin();
+    hashBuilder.add(salt + stationUid + password);
+    hashBuilder.calculate();
+    request += "&hash=" + hashBuilder.toString();
+
+    if (measurements.getTemperatureC().hasValue()) {
+        request += "&temperature=";
+        request += measurements.getTemperatureC().getValue();
+    }
+    if (measurements.getWindMinKmH().hasValue()) {
+        request += "&wind_min=";
+        request += kmPerHourToKnots(measurements.getWindMinKmH().getValue());
+    }
+    if (measurements.getWindAvgKmH().hasValue()) {
+        request += "&wind_avg=";
+        request += kmPerHourToKnots(measurements.getWindAvgKmH().getValue());
+    }
+    if (measurements.getWindGustKmH().hasValue()) {
+        request += "&wind_max=";
+        request += kmPerHourToKnots(measurements.getWindGustKmH().getValue());
+    }
+    if (measurements.getWindDirectorDeg().hasValue()) {
+        request += "&wind_direction=";
+        request += measurements.getWindDirectorDeg().getValue();
+    }
+    if (measurements.getHumidity().hasValue()) {
+        request += "&rh=";
+        request += measurements.getHumidity().getValue();
+    }
+    if (measurements.getRainMm().hasValue()) {
+        request += "&precip=";
+        request += measurements.getRainMm().getValue();
+    }
+    request += "&interval=";
+    request += (MeasurementsStore::windAggregatesMeasurementWindow / 1000.f);
+
+    HTTPClient http;
+    http.begin(request);
+    int httpCode = http.GET();
+    http.end();
+
+    windGuruLastUpdated = millis();
+
+    if (httpCode < 200 || httpCode >= 400) {
+        Log.warningln("Failed to perform request %s, code %d", request.c_str(), httpCode);
+        windGuruExporterStatus = WeatherExporterStatus::ERROR;
+        return;
+    }
+    Log.traceln("Request %s returned code %d", request.c_str(), httpCode);
+    windGuruExporterStatus = WeatherExporterStatus::OK;
 }
 
 void ExportersContainer::windyExport(const WeatherBridgeContext &context) {

@@ -6,10 +6,11 @@
 #include "weatherBridge/types.hpp"
 
 class MeasurementsStore {
+public:
+    static constexpr unsigned int windAggregatesMeasurementWindow = 4 * 60 * 1000;
 private:
     // keep measurements for 2 minutes
     static constexpr unsigned int measurementExpireTimeout = 2 * 60 * 1000;
-    static constexpr unsigned int windGustMeasurementWindow = 4 * 60 * 1000;
     int stationId = -1;
 
 
@@ -22,7 +23,9 @@ private:
     TimedOptional<int> humidity = TimedOptional<int>::empty(measurementExpireTimeout);
 
     TimedOptional<float> windGustKmH = TimedOptional<float>::empty(measurementExpireTimeout);
-    TimeExpiringList<float> windSpeedRecords = TimeExpiringList<float>(windGustMeasurementWindow);
+    TimedOptional<float> windMinKmH = TimedOptional<float>::empty(measurementExpireTimeout);
+    TimedOptional<float> windAvgKmH = TimedOptional<float>::empty(measurementExpireTimeout);
+    TimeExpiringList<float> windSpeedRecords = TimeExpiringList<float>(windAggregatesMeasurementWindow);
 
 public:
     MeasurementsStore() = default;
@@ -50,4 +53,8 @@ public:
     const TimedOptional<float> &getRainMm() const;
 
     const TimedOptional<int> &getHumidity() const;
+
+    const TimedOptional<float> &getWindMinKmH() const;
+
+    const TimedOptional<float> &getWindAvgKmH() const;
 };
