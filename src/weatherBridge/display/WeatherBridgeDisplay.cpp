@@ -81,8 +81,10 @@ void WeatherBridgeDisplay::paintSplash() {
     delegate.print(F("Bridge"));
     delegate.setTextColor(1);
     delegate.setTextSize(1);
-    delegate.setCursor(7, 50);
-    delegate.setTextWrap(false);
-    delegate.print(F("github.com/shchuko"));
+    delegate.setCursor(7, 45);
+    delegate.setTextWrap(true);
+    delegate.print(F("github.com/shchuko/"));
+    delegate.setCursor(7, 55);
+    delegate.print(F("acurite-bridge"));
     delegate.drawBitmap(105, 5, image_weather_cloud_sunny_bits, 17, 16, 1);
 }
