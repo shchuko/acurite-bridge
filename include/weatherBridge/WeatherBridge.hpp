@@ -19,7 +19,7 @@
 #include "SettingsServer.hpp"
 #include "RFReceiver.hpp"
 #include "AvailableStationsTracker.hpp"
-#include "ExportersContainer.hpp"
+#include "WeatherExporter.hpp"
 
 class WeatherBridge {
 private:
@@ -45,7 +45,7 @@ private:
     MeasurementsStore measurementsStore;
     AvailableStationsTracker availableStationsTracker;
 
-    ExportersContainer exportersContainer = ExportersContainer();
+    WeatherExporter exportersContainer = WeatherExporter();
 
     WeatherBridgeContext context = WeatherBridgeContext(isConfigurationMode,
                                                         wifiApStatus,

@@ -9,7 +9,7 @@
 
 class WeatherBridgeContext;
 
-class ExportersContainer {
+class WeatherExporter {
 private:
     WeatherExporterStatus pwsWeatherExporterStatus = WeatherExporterStatus::INIT;
     unsigned long pwsWeatherLastUpdated = 0 - PWS_WEATHER_UPDATE_INTERVAL_MILLI;

@@ -5,7 +5,7 @@ WeatherBridgeContext::WeatherBridgeContext(const bool &isConfigurationMode, cons
                                            const WeatherBridgeSettings &settings, const bool &ntpTimeSyncOk,
                                            const WiFiClientStatus &wifiConnectionStatus,
                                            const MeasurementsStore &measurementsStore,
-                                           const ExportersContainer &exportersContainer)
+                                           const WeatherExporter &exportersContainer)
         : wifiApContext(wifiApContext),
           settings(settings),
           isConfigurationMode(isConfigurationMode),

@@ -1,18 +1,18 @@
 #include <HTTPClient.h>
 #include <MD5Builder.h>
 
-#include "weatherBridge/ExportersContainer.hpp"
+#include "weatherBridge/WeatherExporter.hpp"
 #include "weatherBridge/WeatherBridgeContext.hpp"
 #include "weatherBridge/units.hpp"
 
-void ExportersContainer::loop(const WeatherBridgeContext &context) {
+void WeatherExporter::loop(const WeatherBridgeContext &context) {
     pwsWeatherExport(context);
     weatherUndergroundExport(context);
     windyGuruExport(context);
     windyExport(context);
 }
 
-void ExportersContainer::pwsWeatherExport(const WeatherBridgeContext &context) {
+void WeatherExporter::pwsWeatherExport(const WeatherBridgeContext &context) {
     const WeatherBridgeSettings &settings = context.settings;
     const String &apiKey = settings.getPwsWeatherApiKey();
     const String &stationId = settings.getPwsWeatherStationId();
@@ -86,7 +86,7 @@ void ExportersContainer::pwsWeatherExport(const WeatherBridgeContext &context) {
     pwsWeatherExporterStatus = WeatherExporterStatus::OK;
 }
 
-void ExportersContainer::weatherUndergroundExport(const WeatherBridgeContext &context) {
+void WeatherExporter::weatherUndergroundExport(const WeatherBridgeContext &context) {
     const WeatherBridgeSettings &settings = context.settings;
     const String &stationId = settings.getWuStationId();
     const String &apiKey = settings.getWuApiKey();
@@ -154,7 +154,7 @@ void ExportersContainer::weatherUndergroundExport(const WeatherBridgeContext &co
     weatherUndergroundExporterStatus = WeatherExporterStatus::OK;
 }
 
-void ExportersContainer::windyGuruExport(const WeatherBridgeContext &context) {
+void WeatherExporter::windyGuruExport(const WeatherBridgeContext &context) {
     const WeatherBridgeSettings &settings = context.settings;
     const String &stationUid = settings.getWindGuruStationUid();
     const String &password = settings.getWindGuruStationPassword();
@@ -234,7 +234,7 @@ void ExportersContainer::windyGuruExport(const WeatherBridgeContext &context) {
     windGuruExporterStatus = WeatherExporterStatus::OK;
 }
 
-void ExportersContainer::windyExport(const WeatherBridgeContext &context) {
+void WeatherExporter::windyExport(const WeatherBridgeContext &context) {
     const WeatherBridgeSettings &settings = context.settings;
     const String &stationId = settings.getWindyStationId();
     const String &apiKey = settings.getWindyApiKey();
@@ -306,18 +306,18 @@ void ExportersContainer::windyExport(const WeatherBridgeContext &context) {
     windyExporterStatus = WeatherExporterStatus::OK;
 }
 
-WeatherExporterStatus ExportersContainer::getPwsWeatherExporterStatus() const {
+WeatherExporterStatus WeatherExporter::getPwsWeatherExporterStatus() const {
     return pwsWeatherExporterStatus;
 }
 
-WeatherExporterStatus ExportersContainer::getWeatherUndergroundExporterStatus() const {
+WeatherExporterStatus WeatherExporter::getWeatherUndergroundExporterStatus() const {
     return weatherUndergroundExporterStatus;
 }
 
-WeatherExporterStatus ExportersContainer::getWindGuruExporterStatus() const {
+WeatherExporterStatus WeatherExporter::getWindGuruExporterStatus() const {
     return windGuruExporterStatus;
 }
 
-WeatherExporterStatus ExportersContainer::getWindyExporterStatus() const {
+WeatherExporterStatus WeatherExporter::getWindyExporterStatus() const {
     return windyExporterStatus;
 }
