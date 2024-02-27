@@ -6,10 +6,17 @@
 #include "weatherBridge/units.hpp"
 
 void WeatherExporter::loop(const WeatherBridgeContext &context) {
-    pwsWeatherExport(context);
-    weatherUndergroundExport(context);
-    windyGuruExport(context);
-    windyExport(context);
+    if (context.ntpTimeSyncOk) {
+        pwsWeatherExport(context);
+        weatherUndergroundExport(context);
+        windyGuruExport(context);
+        windyExport(context);
+    } else {
+        pwsWeatherExporterStatus = WeatherExporterStatus::NTP_ERR;
+        weatherUndergroundExporterStatus = WeatherExporterStatus::NTP_ERR;
+        windGuruExporterStatus = WeatherExporterStatus::NTP_ERR;
+        windyExporterStatus = WeatherExporterStatus::NTP_ERR;
+    }
 }
 
 void WeatherExporter::pwsWeatherExport(const WeatherBridgeContext &context) {

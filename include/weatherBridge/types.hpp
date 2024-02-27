@@ -8,5 +8,5 @@ enum class StationModel {
 };
 
 enum class WeatherExporterStatus {
-    OFF, OK, ERROR, INIT, NO_DATA
+    OFF, OK, ERROR, INIT, NO_DATA, NTP_ERR
 };

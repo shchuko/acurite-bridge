@@ -72,6 +72,8 @@ String WeatherExportersPage::getWeatherExporterStatusName(WeatherExporterStatus 
             return F("INIT");
         case WeatherExporterStatus::NO_DATA:
             return F("NO DATA");
+        case WeatherExporterStatus::NTP_ERR:
+            return F("NTP ERR");
     }
     return "";
 }
