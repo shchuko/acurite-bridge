@@ -2,14 +2,23 @@
 
 #include "weatherBridge/types.hpp"
 
+#define PWS_WEATHER_UPDATE_INTERVAL_MILLI (60 * 1000)
+
 class WeatherBridgeContext;
 
 class ExportersContainer {
 private:
-    WeatherExporterStatus pwsWeatherExporterStatus = WeatherExporterStatus::OFF;
-    WeatherExporterStatus weatherUndergroundExporterStatus = WeatherExporterStatus::OFF;
-    WeatherExporterStatus windGuruExporterStatus = WeatherExporterStatus::OFF;
-    WeatherExporterStatus windyExporterStatus = WeatherExporterStatus::OFF;
+    WeatherExporterStatus pwsWeatherExporterStatus = WeatherExporterStatus::INIT;
+    unsigned long pwsWeatherLastUpdated = 0 - PWS_WEATHER_UPDATE_INTERVAL_MILLI;
+
+    WeatherExporterStatus weatherUndergroundExporterStatus = WeatherExporterStatus::INIT;
+    unsigned long weatherUndergroundLastUpdated = 0;
+
+    WeatherExporterStatus windGuruExporterStatus = WeatherExporterStatus::INIT;
+    unsigned long windGuruLastUpdated = 0;
+
+    WeatherExporterStatus windyExporterStatus = WeatherExporterStatus::INIT;
+    unsigned long windyLastUpdated = 0;
 
 public:
     void loop(const WeatherBridgeContext &context);
@@ -23,11 +32,11 @@ public:
     WeatherExporterStatus getWindyExporterStatus() const;
 
 private:
-    WeatherExporterStatus pwsWeatherExport(const WeatherBridgeContext &context);
+    void pwsWeatherExport(const WeatherBridgeContext &context);
 
-    WeatherExporterStatus weatherUndergroundExport(const WeatherBridgeContext &context);
+    void weatherUndergroundExport(const WeatherBridgeContext &context);
 
-    WeatherExporterStatus windyGuruExport(const WeatherBridgeContext &context);
+    void windyGuruExport(const WeatherBridgeContext &context);
 
-    WeatherExporterStatus windyExport(const WeatherBridgeContext &context);
+    void windyExport(const WeatherBridgeContext &context);
 };
