@@ -32,7 +32,7 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
    the button.
 4. Find Wi-Fi AP info and IP address on the device screen (by default it's `WBridge-AP` non-protected Wi-Fi network and
    most likely [192.168.4.1](http://192.168.4.1/) IP).
-5. Connect to the AP, open IP address in web browser. 
+5. Connect to the AP, open IP address in web browser.
    <img src="docs/configsite.png" alt="configsite">
 6. Enter your Wi-Fi Network Name (SSID) and Password.
 7. Select *Weather Station* from the list (the device will listen for station signals, to get updated list refresh the
@@ -50,6 +50,8 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
   for [LoRa32 module case 3D model](https://www.thingiverse.com/thing:4518757).
 * [NorthernMan54](https://github.com/NorthernMan54) for
   his [port of rtl_433 library](https://github.com/NorthernMan54/rtl_433_ESP) for ESP.
+* [Flipper Zero](https://flipperzero.one/) developers for creating a handy tool with 433Mhz signals recording feature 
+  (the device was developed without having physical access to the weather station, only signal records were used).
 
 ## Notes
 
