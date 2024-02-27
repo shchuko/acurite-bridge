@@ -15,6 +15,7 @@ static constexpr auto WU_API_KEY = "wu_api_key";
 static constexpr auto WU_STATION_ID = "wu_station_id";
 static constexpr auto STATION_OPTIONS_PLACEHOLDER = "station_options";
 static constexpr auto SELECTED_STATION_FORM_FIELD = "station";
+static constexpr auto SELECTED_STATION_PRESERVE_OPTION = "preserve settings";
 
 
 void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const AvailableStationsTracker &availableStationsTracker) {
@@ -46,8 +47,9 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const
             } else if (var == WU_STATION_ID) {
                 return settings.getWuStationId();
             } else if (var == STATION_OPTIONS_PLACEHOLDER) {
-                String result;
                 char buf[64];
+                sprintf(buf, "<option label=\"%s\">%s</option>", SELECTED_STATION_PRESERVE_OPTION, SELECTED_STATION_PRESERVE_OPTION);
+                String result = buf;
                 for (const auto &pair: availableStationsTracker.getStations()) {
                     switch (pair.first) {
                         case StationModel::NOT_SELECTED:
@@ -110,7 +112,12 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const
                 } else if (p->name() == WU_STATION_ID) {
                     wuStationId = p->value();
                 } else if (p->name() == SELECTED_STATION_FORM_FIELD) {
-                    selectedStationId = p->value();
+                    const String &maybeSelectedStationId = p->value();
+                    if (maybeSelectedStationId == SELECTED_STATION_PRESERVE_OPTION) {
+                        selectedStationId = settingStore.getSettings().getSelectedStationId();
+                    } else {
+                        selectedStationId = maybeSelectedStationId;
+                    }
                 }
             }
         }
