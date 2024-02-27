@@ -23,6 +23,17 @@ String convertDegreesToWindDirection(float degrees) {
 }
 
 float kmPerHourToKnots(float speedInKmH) {
-    const float conversionFactor = 0.539957;
-    return speedInKmH * conversionFactor;
+    return speedInKmH * 0.539957f;
+}
+
+float celsiusToFahrenheit(float celsiusTemperature) {
+    return celsiusTemperature * 9 / 5 + 32;
+}
+
+float kmPerHourToMilesPerHour(float speedInKmH) {
+    return speedInKmH * 0.621371f;
+}
+
+float mmToInch(float mm) {
+    return mm * 0.0393701f;
 }
