@@ -18,7 +18,8 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
 
 ## Assemble
 
-1. Connect a button between GPIO4 and GND. <img src="docs/disassembled.png" width="500" alt="disassembled">
+1. Connect a button between GPIO4 and GND.
+   <img src="docs/disassembled.png" width="500" alt="disassembled">
 2. Connect ESP32 to PC.
 3. Run  `Upload Filesystem Image` and `Upload` PlatformIO targets
 4. Find ESP32 started and showing info.
@@ -31,7 +32,8 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
    the button.
 4. Find Wi-Fi AP info and IP address on the device screen (by default it's `WBridge-AP` non-protected Wi-Fi network and
    most likely [192.168.4.1](http://192.168.4.1/) IP).
-5. Connect to the AP, open IP address in web browser.
+5. Connect to the AP, open IP address in web browser. 
+   <img src="docs/configsite.png" alt="configsite">
 6. Enter your Wi-Fi Network Name (SSID) and Password.
 7. Select *Weather Station* from the list (the device will listen for station signals, to get updated list refresh the
    page). Currently supported Acurite 5n1 only.
