@@ -1,6 +1,7 @@
 #include "weatherBridge/MeasurementsStore.hpp"
 
-MeasurementsStore::MeasurementsStore(StationModel stationModel, int stationId) : stationModel(stationModel), stationId(stationId) {}
+MeasurementsStore::MeasurementsStore(StationModel stationModel, int stationId) : stationModel(stationModel),
+                                                                                 stationId(stationId) {}
 
 void MeasurementsStore::loop() {
     rssi.maybeExpireValue();
@@ -10,7 +11,7 @@ void MeasurementsStore::loop() {
     rainMmLastHour.maybeExpireValue();
     rainMmRecords.loop();
     humidity.maybeExpireValue();
-    
+
     windGustKmH.maybeExpireValue();
     windMinKmH.maybeExpireValue();
     windAvgKmH.maybeExpireValue();
@@ -49,16 +50,19 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
         rainMmLastHour.set(value);
 
         // May contain many measurements, avoid copying, read internals
-        const std::deque<std::pair<unsigned long, float>>& values = rainMmRecords.getValuesRaw();
-        if (values.size() > 1) {
-            float prevValue = std::begin(values)->second;
-            float diff = value - prevValue;
-            if (diff > 0) {
-                rainMmLastHour.set(diff);
-            } else {
-                rainMmLastHour.set(0);
+        const std::deque<std::pair<unsigned long, float>> &values = rainMmRecords.getValuesRaw();
+        auto it = values.begin();
+        float increase = 0.0f;
+        while (it != values.end() && it != values.end() - 1) {
+            auto first = it->second;
+            auto second = (it + 1)->second;
+            // handle sequence resets
+            if (second > first) {
+                increase += second - first;
             }
+            ++it;
         }
+        rainMmLastHour.set(increase);
     }
     if (measurements.humidity.hasValue()) {
         humidity.set(measurements.humidity.getValue());
