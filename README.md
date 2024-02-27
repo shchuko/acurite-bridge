@@ -27,7 +27,8 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
 
 1. Unplug power cable from device.
 2. Press and hold a button (connect GPIO4 to GND).
-3. Plug the power cable back. Device will start in **Configuration Mode**.
+3. Plug the power cable back holding the button. Device will start in **Configuration Mode**. Once it starts, release
+   the button.
 4. Find Wi-Fi AP info and IP address on the device screen (by default it's `WBridge-AP` non-protected Wi-Fi network and
    most likely [192.168.4.1](http://192.168.4.1/) IP).
 5. Connect to the AP, open IP address in web browser.
