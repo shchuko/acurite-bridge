@@ -9,6 +9,7 @@ static constexpr auto TIMEZONE_STR = "timezone_str";
 static constexpr auto PWSWEATHER_STATION_ID = "pwsweather_station_id";
 static constexpr auto PWSWEATHER_API_KEY = "pwsweather_api_key";
 static constexpr auto WINDGURU_STATION_UID = "windguru_station_uid";
+static constexpr auto WINDGURU_STATION_PASSWORD = "windguru_station_password";
 static constexpr auto WINDY_API_KEY = "windy_api_key";
 static constexpr auto WINDY_STATION_ID = "windy_station_id";
 static constexpr auto WU_API_KEY = "wu_api_key";
@@ -18,7 +19,8 @@ static constexpr auto SELECTED_STATION_FORM_FIELD = "station";
 static constexpr auto SELECTED_STATION_PRESERVE_OPTION = "preserve settings";
 
 
-void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const AvailableStationsTracker &availableStationsTracker) {
+void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore,
+                                 const AvailableStationsTracker &availableStationsTracker) {
     server.on("/", HTTP_GET, [&](AsyncWebServerRequest *request) {
         request->send(fs, "/settings.html", "text/html", false, [&](const String &var) -> String {
             auto settings = settingStore.getSettings();
@@ -38,6 +40,8 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const
                 return settings.getPwsWeatherApiKey();
             } else if (var == WINDGURU_STATION_UID) {
                 return settings.getWindGuruStationUid();
+            } else if (var == WINDGURU_STATION_PASSWORD) {
+                return settings.getWindGuruStationPassword();
             } else if (var == WINDY_API_KEY) {
                 return settings.getWindyApiKey();
             } else if (var == WINDY_STATION_ID) {
@@ -48,7 +52,8 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const
                 return settings.getWuStationId();
             } else if (var == STATION_OPTIONS_PLACEHOLDER) {
                 char buf[64];
-                sprintf(buf, "<option label=\"%s\">%s</option>", SELECTED_STATION_PRESERVE_OPTION, SELECTED_STATION_PRESERVE_OPTION);
+                sprintf(buf, "<option label=\"%s\">%s</option>", SELECTED_STATION_PRESERVE_OPTION,
+                        SELECTED_STATION_PRESERVE_OPTION);
                 String result = buf;
                 for (const auto &pair: availableStationsTracker.getStations()) {
                     switch (pair.first) {
@@ -103,6 +108,8 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const
                     pwsWeatherApiKey = p->value();
                 } else if (p->name() == WINDGURU_STATION_UID) {
                     windGuruStationUid = p->value();
+                } else if (p->name() == WINDGURU_STATION_PASSWORD) {
+                    windGuruStationPassword = p->value();
                 } else if (p->name() == WINDY_API_KEY) {
                     windyApiKey = p->value();
                 } else if (p->name() == WINDY_STATION_ID) {
@@ -121,7 +128,8 @@ void SettingsServer::startServer(fs::FS &fs, FSSettingStore &settingStore, const
                 }
             }
         }
-        request->send(201, "text/html", "Saving settings. The device will restart soon automatically to apply the settings.");
+        request->send(201, "text/html",
+                      "Saving settings. The device will restart soon automatically to apply the settings.");
         Log.infoln("Applying settings update");
 
         WeatherBridgeSettings settings = WeatherBridgeSettings(
