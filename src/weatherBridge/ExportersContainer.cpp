@@ -31,6 +31,7 @@ void ExportersContainer::pwsWeatherExport(const WeatherBridgeContext &context) {
         return;
     }
 
+    // https://github.com/OurColonial/WeatherLink-to-PWSweather
     String request = "https://pwsupdate.pwsweather.com/api/v1/submitwx";
     request += "?ID=" + stationId;
     request += "&PASSWORD=" + apiKey;
@@ -103,6 +104,7 @@ void ExportersContainer::weatherUndergroundExport(const WeatherBridgeContext &co
         return;
     }
 
+    // https://support.weather.com/s/article/PWS-Upload-Protocol
     String request = "https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php";
     request += "?ID=" + stationId;
     request += "&PASSWORD=" + apiKey;
@@ -170,6 +172,7 @@ void ExportersContainer::windyGuruExport(const WeatherBridgeContext &context) {
         return;
     }
 
+    // https://stations.windguru.cz/upload_api.php
     String request = "https://www.windguru.cz/upload/api.php";
     request += "?uid=" + stationUid;
 
@@ -250,6 +253,7 @@ void ExportersContainer::windyExport(const WeatherBridgeContext &context) {
         return;
     }
 
+    // https://community.windy.com/topic/8168/report-your-weather-station-data-to-windy
     String request = "https://stations.windy.com/pws/update/" + apiKey;
     request += "?stationId=" + stationId;
 
