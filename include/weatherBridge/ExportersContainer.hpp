@@ -5,7 +5,7 @@
 #define PWS_WEATHER_UPDATE_INTERVAL_MILLI (60 * 1000)
 #define WEATHER_UNDERGROUND_UPDATE_INTERVAL_MILLI (60 * 1000)
 #define WINDY_UPDATE_INTERVAL_MILLI (2 * 60 * 1000)
-#define WIND_GURU_UPDATE_INTERVAL (2 * 60 * 1000)
+#define WIND_GURU_UPDATE_INTERVAL (60 * 1000)
 
 class WeatherBridgeContext;
 
@@ -18,7 +18,7 @@ private:
     unsigned long weatherUndergroundLastUpdated = 0 - WEATHER_UNDERGROUND_UPDATE_INTERVAL_MILLI;
 
     WeatherExporterStatus windGuruExporterStatus = WeatherExporterStatus::INIT;
-    unsigned long windGuruLastUpdated = 0;
+    unsigned long windGuruLastUpdated = 0 - WIND_GURU_UPDATE_INTERVAL;
 
     WeatherExporterStatus windyExporterStatus = WeatherExporterStatus::INIT;
     unsigned long windyLastUpdated = 0 - WINDY_UPDATE_INTERVAL_MILLI;
