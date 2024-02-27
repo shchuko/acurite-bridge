@@ -46,7 +46,7 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
             }
         }
         windMinKmH.set(min);
-        windGustKmH.set(min);
+        windGustKmH.set(max);
         windAvgKmH.set(static_cast<float>(sum / records.size()));
     }
     if (measurements.windDirectorDeg.hasValue()) {
