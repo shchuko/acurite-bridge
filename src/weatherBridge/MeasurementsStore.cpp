@@ -33,12 +33,20 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
         windSpeedRecords.add(speed);
 
         std::vector<float> records = windSpeedRecords.getValues();
-        windGustKmH.set(*std::max_element(std::begin(records), std::end(records)));
-        windGustKmH.set(*std::min_element(std::begin(records), std::end(records)));
         double sum = 0.0;
+        float min = speed;
+        float max = speed;
         for (const auto &item: records) {
             sum += item;
+            if (item < min) {
+                min = item;
+            }
+            if (item > max) {
+                max = item;
+            }
         }
+        windMinKmH.set(min);
+        windGustKmH.set(min);
         windAvgKmH.set(static_cast<float>(sum / records.size()));
     }
     if (measurements.windDirectorDeg.hasValue()) {
