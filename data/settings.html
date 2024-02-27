@@ -7,9 +7,9 @@
 <body>
 
 <form method="POST" id="settingsForm" class="settings-form">
-    <h1><a href="https://github.com/shchuko/esp-weather-bridge" target="_blank">Weather Bridge</a></h1>
+    <h1><a href="https://github.com/shchuko/acurite-bridge" target="_blank">Weather Bridge</a></h1>
 
-    <h2>Wi-Fi Connection Settings</h2>
+    <h2>Wi-Fi Connection</h2>
     <div class="form-section">
         <label for="wifi_ssid">SSID:</label>
         <input type="text" id="wifi_ssid" name="wifi_ssid" value="%wifi_ssid%">
@@ -20,22 +20,21 @@
         </div>
     </div>
 
-    <h2>Weather Station Settings</h2>
+    <h2>Weather</h2>
     <div class="form-section">
+        <h3>Station Configuration</h3>
         <label for="station">Weather Station (refresh page to get updated list):</label>
         <select name="station" id="station">
             %station_options%
         </select>
     </div>
 
-    <h2>Data export settings</h2>
     <div class="form-section">
-
         <h3>PWSWeather</h3>
         <label for="pwsweather_station_id">Station ID:</label>
         <input type="text" id="pwsweather_station_id" name="pwsweather_station_id" value="%pwsweather_station_id%">
 
-        <label for="pwsweather_api_key">API KEY:</label>
+        <label for="pwsweather_api_key">API key:</label>
         <div class="input-reveal-container">
             <input type="password" id="pwsweather_api_key" name="pwsweather_api_key" value="%pwsweather_api_key%">
             <button type="button" onclick="revealPassword('pwsweather_api_key')" class="reveal-button">Reveal
@@ -60,37 +59,40 @@
 
     <div class="form-section">
         <h3>Windy</h3>
-        <label for="windy_api_key">API KEY:</label>
+
+        <label for="windy_station_id">Station ID:</label>
+        <input type="text" id="windy_station_id" name="windy_station_id" value="%windy_station_id%">
+
+        <label for="windy_api_key">API key:</label>
         <div class="input-reveal-container">
             <input type="password" id="windy_api_key" name="windy_api_key" value="%windy_api_key%">
             <button type="button" onclick="revealPassword('windy_api_key')" class="reveal-button">Reveal</button>
         </div>
-        <label for="windy_station_id">Station ID:</label>
-        <input type="text" id="windy_station_id" name="windy_station_id" value="%windy_station_id%">
     </div>
 
     <div class="form-section">
         <h3>Weather Underground</h3>
-        <label for="wu_api_key">API KEY:</label>
         <label for="wu_station_id">Station ID:</label>
         <input type="text" id="wu_station_id" name="wu_station_id" value="%wu_station_id%">
+        <label for="wu_api_key">API key:</label>
         <div class="input-reveal-container">
             <input type="password" id="wu_api_key" name="wu_api_key" value="%wu_api_key%">
             <button type="button" onclick="revealPassword('wu_api_key')" class="reveal-button">Reveal</button>
         </div>
     </div>
 
-    <h2>Time Settings</h2>
+    <h2>Other</h2>
     <div class="form-section">
-        <label for="timezone_str">POSIX Timezone string:</label>
+        <h3>Time</h3>
+        <label for="timezone_str"><a href="https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html">POSIX</a> Timezone string (leave empty for UTC):</label>
         <input type="text" id="timezone_str" name="timezone_str" value="%timezone_str%">
     </div>
 
-    <h2>Configuration mode Wi-Fi AP Settings</h2>
     <div class="form-section">
+        <h3>Configuration mode Wi-Fi AP Settings</h3>
         <label for="wifi_ap_ssid">SSID:</label>
         <input type="text" id="wifi_ap_ssid" name="wifi_ap_ssid" value="%wifi_ap_ssid%">
-        <label for="wifi_ap_password">Password (leave empty to disable):</label>
+        <label for="wifi_ap_password">Password (leave empty for open network):</label>
         <div class="input-reveal-container">
             <input type="password" id="wifi_ap_password" name="wifi_ap_password" value="%wifi_ap_password%">
             <button type="button" onclick="revealPassword('wifi_ap_password')" class="reveal-button">Reveal</button>
