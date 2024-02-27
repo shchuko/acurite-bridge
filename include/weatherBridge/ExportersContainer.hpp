@@ -3,6 +3,7 @@
 #include "weatherBridge/types.hpp"
 
 #define PWS_WEATHER_UPDATE_INTERVAL_MILLI (60 * 1000)
+#define WEATHER_UNDERGROUND_UPDATE_INTERVAL_MILLI (60 * 1000)
 
 class WeatherBridgeContext;
 
@@ -12,7 +13,7 @@ private:
     unsigned long pwsWeatherLastUpdated = 0 - PWS_WEATHER_UPDATE_INTERVAL_MILLI;
 
     WeatherExporterStatus weatherUndergroundExporterStatus = WeatherExporterStatus::INIT;
-    unsigned long weatherUndergroundLastUpdated = 0;
+    unsigned long weatherUndergroundLastUpdated = 0 - WEATHER_UNDERGROUND_UPDATE_INTERVAL_MILLI;
 
     WeatherExporterStatus windGuruExporterStatus = WeatherExporterStatus::INIT;
     unsigned long windGuruLastUpdated = 0;
