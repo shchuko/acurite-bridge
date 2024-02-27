@@ -1,0 +1,11 @@
+  DECL(acurite_rain_896) \
+  DECL(acurite_th) \
+  DECL(acurite_txr) \
+  DECL(acurite_986) \
+  DECL(acurite_606) \
+  DECL(acurite_00275rm) \
+  DECL(acurite_590tx) \
+  DECL(acurite_01185m) \
+  /* Add new decoders here. */
+#define NUMOF_OOK_DEVICES 8
+#define NUMOF_FSK_DEVICES 0

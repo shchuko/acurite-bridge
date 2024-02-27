@@ -1,0 +1,15 @@
+  // This is a generated fragment from tools/update_rtl_433_devices.sh
+
+if (rtl_433_ESP::ookModulation) {
+  memcpy(&cfg->devices[0], &acurite_rain_896, sizeof(r_device));
+  memcpy(&cfg->devices[1], &acurite_th, sizeof(r_device));
+  memcpy(&cfg->devices[2], &acurite_txr, sizeof(r_device));
+  memcpy(&cfg->devices[3], &acurite_986, sizeof(r_device));
+  memcpy(&cfg->devices[4], &acurite_606, sizeof(r_device));
+  memcpy(&cfg->devices[5], &acurite_00275rm, sizeof(r_device));
+  memcpy(&cfg->devices[6], &acurite_590tx, sizeof(r_device));
+  memcpy(&cfg->devices[7], &acurite_01185m, sizeof(r_device));
+} else {
+}
+
+  // end of fragment
