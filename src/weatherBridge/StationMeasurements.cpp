@@ -8,5 +8,5 @@ StationMeasurements::StationMeasurements(StationModel stationModel, int stationI
                                                                           temperatureC(temperatureC),
                                                                           windSpeedKmH(windSpeedKmH),
                                                                           windDirectorDeg(windDirectorDeg),
-                                                                          rainMm(rainMm),
+                                                                          rainMmAccumulation(rainMm),
                                                                           humidity(humidity) {}

@@ -44,4 +44,7 @@ public:
                        });
         return result;
     }
+    const std::deque<std::pair<unsigned long, T>> &getValuesRaw() const {
+        return values;
+    }
 };

@@ -19,10 +19,13 @@ private:
     TimedOptional<float> temperatureC = TimedOptional<float>::empty(measurementExpireTimeout);
     TimedOptional<float> windSpeedKmH = TimedOptional<float>::empty(measurementExpireTimeout);
     TimedOptional<float> windDirectorDeg = TimedOptional<float>::empty(measurementExpireTimeout);
-    TimedOptional<float> rainMm = TimedOptional<float>::empty(measurementExpireTimeout);
     TimedOptional<int> humidity = TimedOptional<int>::empty(measurementExpireTimeout);
+    TimedOptional<float> windGustKmH = TimedOptional<float>::empty( measurementExpireTimeout);
 
-    TimedOptional<float> windGustKmH = TimedOptional<float>::empty(measurementExpireTimeout);
+    // Keep records for 1 hour
+    TimeExpiringList<float> rainMmRecords = TimeExpiringList<float>(static_cast<unsigned int>(60 * 60 * 1000));
+    TimedOptional<float> rainMmLastHour = TimedOptional<float>::empty(measurementExpireTimeout);
+
     TimedOptional<float> windMinKmH = TimedOptional<float>::empty(measurementExpireTimeout);
     TimedOptional<float> windAvgKmH = TimedOptional<float>::empty(measurementExpireTimeout);
     TimeExpiringList<float> windSpeedRecords = TimeExpiringList<float>(windAggregatesMeasurementWindow);

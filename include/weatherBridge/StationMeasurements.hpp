@@ -11,7 +11,7 @@ public:
     const Optional<float> temperatureC = Optional<float>::empty();
     const Optional<float> windSpeedKmH = Optional<float>::empty();
     const Optional<float> windDirectorDeg = Optional<float>::empty();
-    const Optional<float> rainMm = Optional<float>::empty();
+    const Optional<float> rainMmAccumulation = Optional<float>::empty();
     const Optional<int> humidity = Optional<int>::empty();
 
     StationMeasurements(StationModel stationModel, int stationId, int rssi,

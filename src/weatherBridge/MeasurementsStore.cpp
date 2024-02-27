@@ -7,7 +7,8 @@ void MeasurementsStore::loop() {
     temperatureC.maybeExpireValue();
     windSpeedKmH.maybeExpireValue();
     windDirectorDeg.maybeExpireValue();
-    rainMm.maybeExpireValue();
+    rainMmLastHour.maybeExpireValue();
+    rainMmRecords.loop();
     humidity.maybeExpireValue();
     
     windGustKmH.maybeExpireValue();
@@ -42,8 +43,22 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
     if (measurements.windDirectorDeg.hasValue()) {
         windDirectorDeg.set(measurements.windDirectorDeg.getValue());
     }
-    if (measurements.rainMm.hasValue()) {
-        rainMm.set(measurements.rainMm.getValue());
+    if (measurements.rainMmAccumulation.hasValue()) {
+        float value = measurements.rainMmAccumulation.getValue();
+        rainMmRecords.add(value);
+        rainMmLastHour.set(value);
+
+        // May contain many measurements, avoid copying, read internals
+        const std::deque<std::pair<unsigned long, float>>& values = rainMmRecords.getValuesRaw();
+        if (values.size() > 1) {
+            float prevValue = std::begin(values)->second;
+            float diff = value - prevValue;
+            if (diff > 0) {
+                rainMmLastHour.set(diff);
+            } else {
+                rainMmLastHour.set(0);
+            }
+        }
     }
     if (measurements.humidity.hasValue()) {
         humidity.set(measurements.humidity.getValue());
@@ -79,7 +94,7 @@ const TimedOptional<float> &MeasurementsStore::getWindDirectorDeg() const {
 }
 
 const TimedOptional<float> &MeasurementsStore::getRainMm() const {
-    return rainMm;
+    return rainMmLastHour;
 }
 
 const TimedOptional<int> &MeasurementsStore::getHumidity() const {
