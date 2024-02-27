@@ -169,7 +169,67 @@ void ExportersContainer::windyExport(const WeatherBridgeContext &context) {
         windyExporterStatus = WeatherExporterStatus::OFF;
     }
 
-    windyExporterStatus = WeatherExporterStatus::ERROR;
+
+    if (millis() - windyLastUpdated < WINDY_UPDATE_INTERVAL_MILLI) {
+        return;
+    }
+
+    const MeasurementsStore &measurements = context.measurementsStore;
+    if (!measurements.getRssi().hasValue()) {
+        windyExporterStatus = WeatherExporterStatus::NO_DATA;
+        return;
+    }
+
+    String request = "https://stations.windy.com/pws/update/" + apiKey;
+    request += "?stationId=" + stationId;
+
+    time_t now = time(nullptr);
+    tm *t = gmtime(&now);
+    static char formattedTime[25];
+    strftime(formattedTime, sizeof(formattedTime), "%Y-%m-%dT%H:%M:%S.%fZ", t);
+
+    request += "&time=";
+    request += formattedTime;
+
+    if (measurements.getTemperatureC().hasValue()) {
+        request += "&tempf=";
+        request += celsiusToFahrenheit(measurements.getTemperatureC().getValue());
+    }
+    if (measurements.getWindSpeedKmH().hasValue()) {
+        request += "&windspeedmph=";
+        request += kmPerHourToMilesPerHour(measurements.getWindSpeedKmH().getValue());
+    }
+    if (measurements.getWindGustKmH().hasValue()) {
+        request += "&windgustmph=";
+        request += kmPerHourToMilesPerHour(measurements.getWindGustKmH().getValue());
+    }
+    if (measurements.getWindDirectorDeg().hasValue()) {
+        request += "&winddir=";
+        request += measurements.getWindDirectorDeg().getValue();
+    }
+    if (measurements.getHumidity().hasValue()) {
+        request += "&humidity=";
+        request += measurements.getHumidity().getValue();
+    }
+    if (measurements.getRainMm().hasValue()) {
+        request += "&rainin=";
+        request += mmToInch(measurements.getRainMm().getValue());
+    }
+
+    HTTPClient http;
+    http.begin(request);
+    int httpCode = http.GET();
+    http.end();
+
+    windyLastUpdated = millis();
+
+    if (httpCode < 200 || httpCode >= 400) {
+        Log.warningln("Failed to perform request %s, code %d", request.c_str(), httpCode);
+        windyExporterStatus = WeatherExporterStatus::ERROR;
+        return;
+    }
+    Log.traceln("Request %s returned code %d", request.c_str(), httpCode);
+    windyExporterStatus = WeatherExporterStatus::OK;
 }
 
 WeatherExporterStatus ExportersContainer::getPwsWeatherExporterStatus() const {
