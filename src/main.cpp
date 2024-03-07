@@ -1,6 +1,7 @@
 #include <HardwareSerial.h>
 #include <ArduinoLog.h>
 
+#include "weatherBridge/LokiLogsExporter.hpp"
 #include "weatherBridge/WeatherBridge.hpp"
 
 #define SERIAL_BAUD 9600
@@ -8,9 +9,26 @@
 
 WeatherBridge weatherBridge = WeatherBridge(SPIFFS, CONFIG_MODE_BUTTON_PIN); // NOLINT(*-interfaces-global-init)
 
+#if defined(LOGS_LOKI_URL) && defined(LOGS_LOKI_USERNAME) && defined(LOGS_LOKI_PASSWORD)
+
+#define STRINGIFY(x) #x
+
+LokiLogsExporter lokiLogsExporter = LokiLogsExporter( // NOLINT(*-interfaces-global-init)
+        &Serial,
+        STRINGIFY(LOGS_LOKI_URL),
+        STRINGIFY(LOGS_LOKI_USERNAME),
+        STRINGIFY(LOGS_LOKI_PASSWORD)
+);
+
+Print *logPrint = &lokiLogsExporter;
+#else
+Print *logPrint = &Serial; // NOLINT(*-interfaces-global-init)
+#endif
+
+
 void setup() {
     Serial.begin(SERIAL_BAUD);
-    Log.begin(LOG_LEVEL_TRACE, &Serial);
+    Log.begin(LOG_LEVEL_TRACE, logPrint);
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
