@@ -82,6 +82,9 @@ void WeatherExporter::pwsWeatherExport(const WeatherBridgeContext &context) {
     int httpCode = http.GET();
     http.end();
 
+    // Avoid sensitive data leak to logs
+    request.replace(apiKey, "[REDACTED]"); 
+
     pwsWeatherLastUpdated = millis();
 
     if (httpCode < 200 || httpCode >= 400) {
@@ -150,6 +153,9 @@ void WeatherExporter::weatherUndergroundExport(const WeatherBridgeContext &conte
     int httpCode = http.GET();
     http.end();
 
+    // Avoid sensitive data leak to logs
+    request.replace(apiKey, "[REDACTED]");
+
     weatherUndergroundLastUpdated = millis();
 
     if (httpCode < 200 || httpCode >= 400) {
@@ -192,7 +198,9 @@ void WeatherExporter::windyGuruExport(const WeatherBridgeContext &context) {
     hashBuilder.begin();
     hashBuilder.add(salt + stationUid + password);
     hashBuilder.calculate();
-    request += "&hash=" + hashBuilder.toString();
+    String hash = hashBuilder.toString();
+
+    request += "&hash=" + hash;
 
     if (measurements.getTemperatureC().hasValue()) {
         request += "&temperature=";
@@ -229,6 +237,9 @@ void WeatherExporter::windyGuruExport(const WeatherBridgeContext &context) {
     http.begin(request);
     int httpCode = http.GET();
     http.end();
+
+    // Avoid sensitive data leak to logs
+    request.replace(hash, "[REDACTED]");
 
     windGuruLastUpdated = millis();
 
@@ -301,6 +312,9 @@ void WeatherExporter::windyExport(const WeatherBridgeContext &context) {
     http.begin(request);
     int httpCode = http.GET();
     http.end();
+
+    // Avoid sensitive data leak to logs
+    request.replace(apiKey, "[REDACTED]");
 
     windyLastUpdated = millis();
 
