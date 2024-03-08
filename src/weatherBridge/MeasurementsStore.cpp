@@ -1,4 +1,5 @@
 #include "weatherBridge/MeasurementsStore.hpp"
+#include "ArduinoLog.h"
 
 MeasurementsStore::MeasurementsStore(StationModel stationModel, int stationId) : stationModel(stationModel),
                                                                                  stationId(stationId) {}
@@ -53,23 +54,33 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
         windDirectorDeg.set(measurements.windDirectorDeg.getValue());
     }
     if (measurements.rainMmAccumulation.hasValue()) {
-        float value = measurements.rainMmAccumulation.getValue();
-        rainMmRecords.add(value);
-        rainMmLastHour.set(value);
+        float accumulation = measurements.rainMmAccumulation.getValue();
+        rainMmRecords.add(accumulation);
 
         // May contain many measurements, avoid copying, read internals
         const std::deque<std::pair<unsigned long, float>> &values = rainMmRecords.getValuesRaw();
         auto it = values.begin();
         float increase = 0.0f;
-        while (it != values.end() && it != values.end() - 1) {
-            auto first = it->second;
-            auto second = (it + 1)->second;
-            // handle sequence resets
-            if (second > first) {
-                increase += second - first;
+
+        String accumulationValuesAsString = "[";
+        while (it != values.end()) {
+            auto prev = it->second;
+            accumulationValuesAsString += prev;
+
+            if (it != values.end() - 1) {
+                auto next = (it + 1)->second;
+                // handle sequence resets
+                if (next > prev) {
+                    increase += next - prev;
+                }
             }
             ++it;
         }
+        accumulationValuesAsString += "]";
+        Log.traceln("Rain mm: accumulation=%f, accumulationValues=%s, lastHour=%s",
+                    accumulation,
+                    accumulationValuesAsString.c_str(),
+                    increase);
         rainMmLastHour.set(increase);
     }
     if (measurements.humidity.hasValue()) {
@@ -105,7 +116,7 @@ const TimedOptional<float> &MeasurementsStore::getWindDirectorDeg() const {
     return windDirectorDeg;
 }
 
-const TimedOptional<float> &MeasurementsStore::getRainMm() const {
+const TimedOptional<float> &MeasurementsStore::getRainMmLastHour() const {
     return rainMmLastHour;
 }
 

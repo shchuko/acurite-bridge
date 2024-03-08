@@ -71,9 +71,9 @@ void WeatherExporter::pwsWeatherExport(const WeatherBridgeContext &context) {
         request += "&humidity=";
         request += measurements.getHumidity().getValue();
     }
-    if (measurements.getRainMm().hasValue()) {
+    if (measurements.getRainMmLastHour().hasValue()) {
         request += "&rainin=";
-        request += mmToInch(measurements.getRainMm().getValue());
+        request += mmToInch(measurements.getRainMmLastHour().getValue());
     }
     request += "&softwaretype=esp32bridge&action=updateraw";
 
@@ -140,9 +140,9 @@ void WeatherExporter::weatherUndergroundExport(const WeatherBridgeContext &conte
         request += "&humidity=";
         request += measurements.getHumidity().getValue();
     }
-    if (measurements.getRainMm().hasValue()) {
+    if (measurements.getRainMmLastHour().hasValue()) {
         request += "&rainin=";
-        request += mmToInch(measurements.getRainMm().getValue());
+        request += mmToInch(measurements.getRainMmLastHour().getValue());
     }
     request += "&softwaretype=esp32bridge&action=updateraw&realtime=1";
     request += "&rtfreq=";
@@ -226,9 +226,9 @@ void WeatherExporter::windyGuruExport(const WeatherBridgeContext &context) {
         request += "&rh=";
         request += measurements.getHumidity().getValue();
     }
-    if (measurements.getRainMm().hasValue()) {
+    if (measurements.getRainMmLastHour().hasValue()) {
         request += "&precip=";
-        request += measurements.getRainMm().getValue();
+        request += measurements.getRainMmLastHour().getValue();
     }
     request += "&interval=";
     request += (MeasurementsStore::windAggregatesMeasurementWindow / 1000.f);
@@ -303,9 +303,9 @@ void WeatherExporter::windyExport(const WeatherBridgeContext &context) {
         request += "&humidity=";
         request += measurements.getHumidity().getValue();
     }
-    if (measurements.getRainMm().hasValue()) {
+    if (measurements.getRainMmLastHour().hasValue()) {
         request += "&rainin=";
-        request += mmToInch(measurements.getRainMm().getValue());
+        request += mmToInch(measurements.getRainMmLastHour().getValue());
     }
 
     HTTPClient http;
