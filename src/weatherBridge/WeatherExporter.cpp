@@ -72,8 +72,9 @@ void WeatherExporter::pwsWeatherExport(const WeatherBridgeContext &context) {
         request += measurements.getHumidity().getValue();
     }
     if (measurements.getRainMmLastHour().hasValue()) {
-        request += "&rainin=";
-        request += mmToInch(measurements.getRainMmLastHour().getValue());
+        Log.traceln("Skipping rainin send to pwsweather, value=%f", measurements.getRainMmLastHour().getValue());
+//        request += "&rainin=";
+//        request += mmToInch(measurements.getRainMmLastHour().getValue());
     }
     request += "&softwaretype=esp32bridge&action=updateraw";
 
@@ -141,8 +142,9 @@ void WeatherExporter::weatherUndergroundExport(const WeatherBridgeContext &conte
         request += measurements.getHumidity().getValue();
     }
     if (measurements.getRainMmLastHour().hasValue()) {
-        request += "&rainin=";
-        request += mmToInch(measurements.getRainMmLastHour().getValue());
+        Log.traceln("Skipping rainin send to wunderground, value=%f", measurements.getRainMmLastHour().getValue());
+//        request += "&rainin=";
+//        request += mmToInch(measurements.getRainMmLastHour().getValue());
     }
     request += "&softwaretype=esp32bridge&action=updateraw&realtime=1";
     request += "&rtfreq=";
@@ -227,8 +229,9 @@ void WeatherExporter::windyGuruExport(const WeatherBridgeContext &context) {
         request += measurements.getHumidity().getValue();
     }
     if (measurements.getRainMmLastHour().hasValue()) {
-        request += "&precip=";
-        request += measurements.getRainMmLastHour().getValue();
+        Log.traceln("Skipping rainin send to windguru, value=%f", measurements.getRainMmLastHour().getValue());
+//        request += "&precip=";
+//        request += measurements.getRainMmLastHour().getValue();
     }
     request += "&interval=";
     request += (MeasurementsStore::windAggregatesMeasurementWindow / 1000.f);
@@ -304,8 +307,9 @@ void WeatherExporter::windyExport(const WeatherBridgeContext &context) {
         request += measurements.getHumidity().getValue();
     }
     if (measurements.getRainMmLastHour().hasValue()) {
-        request += "&rainin=";
-        request += mmToInch(measurements.getRainMmLastHour().getValue());
+        Log.traceln("Skipping rainin send to windy, value=%f", measurements.getRainMmLastHour().getValue());
+//        request += "&rainin=";
+//        request += mmToInch(measurements.getRainMmLastHour().getValue());
     }
 
     HTTPClient http;
