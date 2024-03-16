@@ -2,6 +2,7 @@
 
 #include "weatherBridge/Acurite5N1Receiver.hpp"
 #include "weatherBridge/types.hpp"
+#include "weatherBridge/LokiLogger.hpp"
 
 #define ACURITE_5N1_MODEL_NAME "Acurite-5n1"
 #define ACURITE_MSGTYPE_5N1_WINDSPEED_WINDDIR_RAINFALL  0x31
@@ -21,6 +22,8 @@ void Acurite5N1Receiver::receiveMessage(String &&message) {
         Log.traceln("Model not matches expected=%s,provided=%s", ACURITE_5N1_MODEL_NAME, model.c_str());
         return;
     }
+
+    LokiLogger::Instance.writeLog("Acurite5N1Receiver: received raw data: " + message);
 
     int id = doc["id"];
     int messageType = doc["message_type"];

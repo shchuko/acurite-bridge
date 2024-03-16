@@ -1,5 +1,6 @@
 #include "weatherBridge/MeasurementsStore.hpp"
 #include "ArduinoLog.h"
+#include "weatherBridge/LokiLogger.hpp"
 
 MeasurementsStore::MeasurementsStore(StationModel stationModel, int stationId) : stationModel(stationModel),
                                                                                  stationId(stationId) {}
@@ -77,10 +78,17 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
             ++it;
         }
         accumulationValuesAsString += "]";
-        Log.traceln("Rain mm: accumulation=%f, accumulationValues=%s, lastHour=%f",
-                    accumulation,
-                    accumulationValuesAsString.c_str(),
-                    increase);
+
+        String logLine = "Rain mm debug: accumulation=";
+        logLine += accumulation;
+        logLine += ", accumulationValues=";
+        logLine += accumulationValuesAsString;
+        logLine += ", lastHourIncrease=";
+        logLine += increase;
+
+        Log.infoln(logLine.c_str());
+        LokiLogger::Instance.writeLog(logLine);
+
         rainMmLastHour.set(increase);
     }
     if (measurements.humidity.hasValue()) {
