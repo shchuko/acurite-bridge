@@ -281,7 +281,7 @@ void WeatherExporter::windyExport(const WeatherBridgeContext &context) {
     time_t now = time(nullptr);
     tm *t = gmtime(&now);
     static char formattedTime[25];
-    strftime(formattedTime, sizeof(formattedTime), "%Y-%m-%dT%H:%M:%S.%fZ", t);
+    strftime(formattedTime, sizeof(formattedTime), "%Y-%m-%dT%H:%M:%S", t);
 
     request += "&time=";
     request += formattedTime;
