@@ -72,12 +72,12 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
 * It's pretty easy to support other stations (not AcuRite 5n1 only), but there was not really reasonable to have this in
   current use case.
 * Precipitation measurements from AcuRite 5n1 are received in weird time window, to be investigated whether they're
-  interpreted correctly. The device may report garbage instead of `rainmm` measurements to weather services. 
+  interpreted correctly. Rain precipitation exporting to weather services are temporary disable to avoid sending garbage.
 
 ## Debugging
 
 For debugging purpose, raw weather station data and important log messages can be sent
 to [Loki](https://grafana.com/oss/loki/). To enable Loki logging,
-copy [config/secrets.ini.dist](config/secrets.ini.dist) into `config/secrets.ini` and configure Loki exporter there.
+copy [config/secrets.ini.dist](config/secrets.ini.dist) into `config/secrets.ini` and configure Loki exporter there. Then you'll be able to read station logs remotely in Loki, without connecting ESP to PC.
 
 Check internals at [LokiLogger](include/weatherBridge/LokiLogger.hpp).
