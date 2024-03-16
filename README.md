@@ -4,6 +4,7 @@ Receives AcuRite 5n1 Weather Station measurements and uploads them to multiple w
 
 * [How to assemble](#assemble).
 * [How to configure data export](#configuring-data-export).
+* [Known problems](https://github.com/shchuko/acurite-bridge/issues).
 
 <img src="docs/front.png" width="500" alt="front">
 
