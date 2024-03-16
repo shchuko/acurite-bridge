@@ -5,6 +5,7 @@ Receives AcuRite 5n1 Weather Station measurements and uploads them to multiple w
 * [How to assemble](#assemble).
 * [How to configure data export](#configuring-data-export).
 * [Known problems](https://github.com/shchuko/acurite-bridge/issues).
+* [Debugging](#debugging)
 
 <img src="docs/front.png" width="500" alt="front">
 
@@ -16,6 +17,14 @@ Supported weather services:
 * [Windguru](https://www.windguru.cz/)
 
 Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + SX1278 433 Mhz transceiver).
+
+## Working station examples
+
+* [Armenian Camp](https://www.facebook.com/armeniancampp/), Artanish, Armenia
+  * PWSWeather - https://www.pwsweather.com/station/pws/ARMENIANCAMP
+  * Windy.com - https://www.windy.com/station/pws-f0d6df5a
+  * WindGuru - https://www.windguru.cz/station/4155
+  * WeatherUnderground - https://www.wunderground.com/dashboard/pws/IGEGHA5
 
 ## Assemble
 
