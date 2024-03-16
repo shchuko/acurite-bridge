@@ -67,6 +67,7 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
         while (it != values.end()) {
             auto prev = it->second;
             accumulationValuesAsString += prev;
+            accumulationValuesAsString += ", ";
 
             if (it != values.end() - 1) {
                 auto next = (it + 1)->second;
