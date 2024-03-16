@@ -77,7 +77,7 @@ void MeasurementsStore::updateMeasurements(const StationMeasurements &measuremen
             ++it;
         }
         accumulationValuesAsString += "]";
-        Log.traceln("Rain mm: accumulation=%f, accumulationValues=%s, lastHour=%s",
+        Log.traceln("Rain mm: accumulation=%f, accumulationValues=%s, lastHour=%f",
                     accumulation,
                     accumulationValuesAsString.c_str(),
                     increase);
