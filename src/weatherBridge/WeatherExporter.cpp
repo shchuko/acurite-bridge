@@ -4,6 +4,7 @@
 #include "weatherBridge/WeatherExporter.hpp"
 #include "weatherBridge/WeatherBridgeContext.hpp"
 #include "weatherBridge/units.hpp"
+#include "weatherBridge/LokiLogger.hpp"
 
 void WeatherExporter::loop(const WeatherBridgeContext &context) {
     if (context.ntpTimeSyncOk) {
@@ -81,20 +82,32 @@ void WeatherExporter::pwsWeatherExport(const WeatherBridgeContext &context) {
     HTTPClient http;
     http.begin(request);
     int httpCode = http.GET();
-    http.end();
 
     // Avoid sensitive data leak to logs
     request.replace(apiKey, "[REDACTED]"); 
 
     pwsWeatherLastUpdated = millis();
 
+    String logLine;
     if (httpCode < 200 || httpCode >= 400) {
-        Log.warningln("Failed to perform request %s, code %d", request.c_str(), httpCode);
+        logLine = "Export failed ";
         pwsWeatherExporterStatus = WeatherExporterStatus::ERROR;
-        return;
+    } else {
+        logLine = "Export OK ";
+        pwsWeatherExporterStatus = WeatherExporterStatus::OK;
     }
-    Log.traceln("Request %s returned code %d", request.c_str(), httpCode);
-    pwsWeatherExporterStatus = WeatherExporterStatus::OK;
+
+    logLine += request;
+    logLine += " code=";
+    logLine += httpCode;
+    logLine += " body=";
+    logLine += http.getString();
+
+    Log.warningln(logLine.c_str());
+    LokiLogger::Instance.writeLog(logLine);
+    Log.traceln(logLine.c_str());
+
+    http.end();
 }
 
 void WeatherExporter::weatherUndergroundExport(const WeatherBridgeContext &context) {
@@ -153,20 +166,32 @@ void WeatherExporter::weatherUndergroundExport(const WeatherBridgeContext &conte
     HTTPClient http;
     http.begin(request);
     int httpCode = http.GET();
-    http.end();
 
     // Avoid sensitive data leak to logs
     request.replace(apiKey, "[REDACTED]");
 
     weatherUndergroundLastUpdated = millis();
 
+    String logLine;
     if (httpCode < 200 || httpCode >= 400) {
-        Log.warningln("Failed to perform request %s, code %d", request.c_str(), httpCode);
+        logLine = "Export failed ";
         weatherUndergroundExporterStatus = WeatherExporterStatus::ERROR;
-        return;
+    } else {
+        logLine = "Export OK ";
+        weatherUndergroundExporterStatus = WeatherExporterStatus::OK;
     }
-    Log.traceln("Request %s returned code %d", request.c_str(), httpCode);
-    weatherUndergroundExporterStatus = WeatherExporterStatus::OK;
+
+    logLine += request;
+    logLine += " code=";
+    logLine += httpCode;
+    logLine += " body=";
+    logLine += http.getString();
+
+    Log.warningln(logLine.c_str());
+    LokiLogger::Instance.writeLog(logLine);
+    Log.traceln(logLine.c_str());
+
+    http.end();
 }
 
 void WeatherExporter::windyGuruExport(const WeatherBridgeContext &context) {
@@ -239,20 +264,32 @@ void WeatherExporter::windyGuruExport(const WeatherBridgeContext &context) {
     HTTPClient http;
     http.begin(request);
     int httpCode = http.GET();
-    http.end();
 
     // Avoid sensitive data leak to logs
     request.replace(hash, "[REDACTED]");
 
     windGuruLastUpdated = millis();
 
+    String logLine;
     if (httpCode < 200 || httpCode >= 400) {
-        Log.warningln("Failed to perform request %s, code %d", request.c_str(), httpCode);
+        logLine = "Export failed ";
         windGuruExporterStatus = WeatherExporterStatus::ERROR;
-        return;
+    } else {
+        logLine = "Export OK ";
+        windGuruExporterStatus = WeatherExporterStatus::OK;
     }
-    Log.traceln("Request %s returned code %d", request.c_str(), httpCode);
-    windGuruExporterStatus = WeatherExporterStatus::OK;
+
+    logLine += request;
+    logLine += " code=";
+    logLine += httpCode;
+    logLine += " body=";
+    logLine += http.getString();
+
+    Log.warningln(logLine.c_str());
+    LokiLogger::Instance.writeLog(logLine);
+    Log.traceln(logLine.c_str());
+
+    http.end();
 }
 
 void WeatherExporter::windyExport(const WeatherBridgeContext &context) {
@@ -315,20 +352,32 @@ void WeatherExporter::windyExport(const WeatherBridgeContext &context) {
     HTTPClient http;
     http.begin(request);
     int httpCode = http.GET();
-    http.end();
 
     // Avoid sensitive data leak to logs
     request.replace(apiKey, "[REDACTED]");
 
     windyLastUpdated = millis();
 
+    String logLine;
     if (httpCode < 200 || httpCode >= 400) {
-        Log.warningln("Failed to perform request %s, code %d", request.c_str(), httpCode);
+        logLine = "Export failed ";
         windyExporterStatus = WeatherExporterStatus::ERROR;
-        return;
+    } else {
+        logLine = "Export OK ";
+        windyExporterStatus = WeatherExporterStatus::OK;
     }
-    Log.traceln("Request %s returned code %d", request.c_str(), httpCode);
-    windyExporterStatus = WeatherExporterStatus::OK;
+
+    logLine += request;
+    logLine += " code=";
+    logLine += httpCode;
+    logLine += " body=";
+    logLine += http.getString();
+
+    Log.warningln(logLine.c_str());
+    LokiLogger::Instance.writeLog(logLine);
+    Log.traceln(logLine.c_str());
+
+    http.end();
 }
 
 WeatherExporterStatus WeatherExporter::getPwsWeatherExporterStatus() const {
