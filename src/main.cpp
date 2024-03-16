@@ -12,7 +12,12 @@ WeatherBridge weatherBridge = WeatherBridge(SPIFFS, CONFIG_MODE_BUTTON_PIN); // 
 void setup() {
     Serial.begin(SERIAL_BAUD);
     Log.begin(LOG_LEVEL_TRACE, &Serial);
+
+#ifdef LOKI_LOGGING_ENABLED
+    LokiLogger::begin(LOKI_URL, LOKI_USERNAME, LOKI_PASSWORD);
+#else
     LokiLogger::beginNoop();
+#endif
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
