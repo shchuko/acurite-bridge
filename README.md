@@ -47,7 +47,7 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
 6. Enter your Wi-Fi Network Name (SSID) and Password.
 7. Select *Weather Station* from the list (the device will listen for station signals, to get updated list refresh the
    page). Currently supported AcuRite 5n1 only.
-8. Fill weather service credentials. Missing credentials will simply
+8. Fill weather service credentials. Empty credentials will disable respective exporter.
 9. If you're not in UTC timezone, please specify your timezone in POSIX format, see
    the [documentation](https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html).
 10. Click on the "SAVE SETTINGS" button.
