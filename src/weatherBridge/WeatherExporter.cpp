@@ -259,7 +259,7 @@ void WeatherExporter::windyGuruExport(const WeatherBridgeContext &context) {
 //        request += measurements.getRainMmLastHour().getValue();
     }
     request += "&interval=";
-    request += (MeasurementsStore::windAggregatesMeasurementWindow / 1000.f);
+    request += (MeasurementsStore::WIND_AGGREGATES_MEASUREMENT_WINDOW / 1000.f);
 
     HTTPClient http;
     http.begin(request);

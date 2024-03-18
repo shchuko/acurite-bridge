@@ -7,28 +7,34 @@
 
 class MeasurementsStore {
 public:
-    static constexpr unsigned int windAggregatesMeasurementWindow = 4 * 60 * 1000;
+    static constexpr unsigned int WIND_AGGREGATES_MEASUREMENT_WINDOW = 4 * 60 * 1000;
 private:
-    // keep measurements for 2 minutes
-    static constexpr unsigned int measurementExpireTimeout = 2 * 60 * 1000;
+    // keep temperature, humidity etc. for 5 minutes as they are updated not as frequently as wind data
+    static constexpr unsigned int NOT_WIND_MEASUREMENTS_EXPIRE_TIMEOUT = 5 * 60 * 1000;
+
+    // keep wind measurements for 2 minutes as they are updated frequently
+    static constexpr unsigned int WIND_MEASUREMENTS_EXPIRE_TIMEOUT = 2 * 60 * 1000;
+
+    // keep
     int stationId = -1;
 
-
     StationModel stationModel = StationModel::NOT_SELECTED;
-    TimedOptional<int> rssi = TimedOptional<int>::empty(measurementExpireTimeout);
-    TimedOptional<float> temperatureC = TimedOptional<float>::empty(measurementExpireTimeout);
-    TimedOptional<float> windSpeedKmH = TimedOptional<float>::empty(measurementExpireTimeout);
-    TimedOptional<float> windDirectorDeg = TimedOptional<float>::empty(measurementExpireTimeout);
-    TimedOptional<int> humidity = TimedOptional<int>::empty(measurementExpireTimeout);
-    TimedOptional<float> windGustKmH = TimedOptional<float>::empty( measurementExpireTimeout);
+    TimedOptional<int> rssi = TimedOptional<int>::empty(NOT_WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
+
+    TimedOptional<int> humidity = TimedOptional<int>::empty(NOT_WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
+    TimedOptional<float> temperatureC = TimedOptional<float>::empty(NOT_WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
+
+    TimedOptional<float> windSpeedKmH = TimedOptional<float>::empty(WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
+    TimedOptional<float> windDirectorDeg = TimedOptional<float>::empty(WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
+    TimedOptional<float> windGustKmH = TimedOptional<float>::empty(WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
 
     // Keep records for 1 hour
     TimeExpiringList<float> rainMmRecords = TimeExpiringList<float>(static_cast<unsigned int>(60 * 60 * 1000));
-    TimedOptional<float> rainMmLastHour = TimedOptional<float>::empty(measurementExpireTimeout);
+    TimedOptional<float> rainMmLastHour = TimedOptional<float>::empty(NOT_WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
 
-    TimedOptional<float> windMinKmH = TimedOptional<float>::empty(measurementExpireTimeout);
-    TimedOptional<float> windAvgKmH = TimedOptional<float>::empty(measurementExpireTimeout);
-    TimeExpiringList<float> windSpeedRecords = TimeExpiringList<float>(windAggregatesMeasurementWindow);
+    TimedOptional<float> windMinKmH = TimedOptional<float>::empty(WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
+    TimedOptional<float> windAvgKmH = TimedOptional<float>::empty(WIND_MEASUREMENTS_EXPIRE_TIMEOUT);
+    TimeExpiringList<float> windSpeedRecords = TimeExpiringList<float>(WIND_AGGREGATES_MEASUREMENT_WINDOW);
 
 public:
     MeasurementsStore() = default;
