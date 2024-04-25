@@ -9,8 +9,8 @@ class MeasurementsStore {
 public:
     static constexpr unsigned int WIND_AGGREGATES_MEASUREMENT_WINDOW = 4 * 60 * 1000;
 private:
-    // keep temperature, humidity etc. for 5 minutes as they are updated not as frequently as wind data
-    static constexpr unsigned int NOT_WIND_MEASUREMENTS_EXPIRE_TIMEOUT = 5 * 60 * 1000;
+    // keep temperature, humidity etc. for 10 minutes as they are updated not as frequently as wind data
+    static constexpr unsigned int NOT_WIND_MEASUREMENTS_EXPIRE_TIMEOUT = 10 * 60 * 1000;
 
     // keep wind measurements for 2 minutes as they are updated frequently
     static constexpr unsigned int WIND_MEASUREMENTS_EXPIRE_TIMEOUT = 2 * 60 * 1000;
