@@ -1,6 +1,7 @@
 # Acurite 5n1 -> Weather Services Forwarder
 
 Receives AcuRite 5n1 Weather Station measurements and uploads them to multiple weather services.
+Try [Marine Screen](https://github.com/shchuko/marine-screen) to display your station measurements on TV
 
 * [How to assemble](#assemble).
 * [How to configure data export](#configuring-data-export).
