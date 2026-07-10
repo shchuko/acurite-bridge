@@ -50,7 +50,7 @@ Based on [TTGO / LILYGO LoRa32](https://www.lilygo.cc/products/lora3) (ESP32 + S
    page). Currently supported AcuRite 5n1 only.
 8. Fill weather service credentials. Empty credentials will disable respective exporter.
 9. If you're not in UTC timezone, please specify your timezone in POSIX format, see
-   the [documentation](https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html).
+   the [documentation](https://ftp.gnu.org/old-gnu/Manuals/glibc-2.2.3/html_node/libc_431.html).
 10. Click on the "SAVE SETTINGS" button.
 11. Find your device rebooted and using the new settings.
 
